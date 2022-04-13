@@ -12,9 +12,9 @@ class ErrorHandler{
             $("#alert-danger").html("Not authorized")
         }
         if(data.status === 400){
-            $("#alert-danger").html("Invalid data")
+            $("#alert-danger").html(data)
         } else {
-        $("#alert-danger").html(data.responseJSON.code)        
+        $("#alert-danger").html(data)        
         }
 
         setTimeout(function() { 
@@ -25,14 +25,11 @@ class ErrorHandler{
     }
     
     static runSuccess(data){
-        const hideValue = ++successShowCounter
         $("#alert-success").show();
-        $("#alert-success").html(data.message)        
+        $("#alert-success").html(data)        
 
         setTimeout(function() { 
-            if(successShowCounter == hideValue){
                 $("#alert-success").hide();
-            }
         }, 3000);
     }
 }

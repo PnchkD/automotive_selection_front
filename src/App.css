@@ -1,6 +1,10 @@
+#root {
+  min-height: 100vh;
+  background-color: lightblue;
+}
+
 .App {
   text-align: center;
-  background-color: lightblue;
 }
 
 .App-logo {
@@ -13,6 +17,7 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
 
 .App-header {
   background-color: #282c34;
@@ -37,3 +42,5 @@
     transform: rotate(360deg);
   }
 }
+
+

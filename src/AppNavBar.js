@@ -3,8 +3,8 @@ import { Alert, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavL
 import { Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 
-const roleUser = "ROLE_USER"
-const roleAdmin = "ROLE_ADMIN"
+const roleUser = "USER"
+const roleAdmin = "ADMIN"
 
 class AppNavbar extends Component {
   constructor(props) {
@@ -35,16 +35,16 @@ class AppNavbar extends Component {
   render() {
     let navItems;
 
-    if(localStorage.getItem("roles") === roleAdmin){ 
+    if(localStorage.getItem("roles").includes(roleAdmin)){ 
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
-                <NavLink padding = "10px" href="/admin">Admin Console</NavLink>
+                <NavLink padding = "10px" href="/admin/users">Users</NavLink>
             </NavItem>
             <NavItem>
                     <NavLink onClick={this.logout} href="/auth">Log Out</NavLink>
                 </NavItem>
         </Nav>
-    } else if(localStorage.getItem("roles") === roleUser){
+    } else if(localStorage.getItem("roles").includes(roleUser)){
         navItems = <Nav className="ml-auto" navbar>
         <NavItem>
             <NavLink href="/users/me">Me</NavLink>

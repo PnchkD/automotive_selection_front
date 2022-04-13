@@ -78,7 +78,7 @@ class UserEdit extends Component {
         const { user: user } = this.state;
         const title = <h2 className='text-white'>Edit User {user.id}</h2>;
 
-        return <div>
+        return <div style={{backgroundColor: 'lightblue'}}>
             <AppNavbar />
             <Container>
                 {title}
@@ -106,7 +106,7 @@ class UserEdit extends Component {
                     <FormGroup className="mt-3">
                         <Label className='text-white' for="eventState">Role</Label>
                         <div className='text-white' onChange={this.handleChange}>
-                            <Input type="radio" name="role" value='AGENT' standalone checked={user.role == "AGENT"} />
+                            <Input type="radio" name="role" value='ADMIN' standalone checked={user.role == "AGENT"} />
                             Agent
                         </div>
                         <div className='text-white' onChange={this.handleChange}>

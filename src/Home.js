@@ -34,8 +34,8 @@ class Home extends Component {
           <div className='d-flex justify-content-center align-items-center h-100'>
           <div className='text-white'>
           <h1 className='mb-1'>HELLO!</h1>
-              <Link className='btn btn-outline-light btn-lg' to='/admin' role='button'>
-                  Admin Console
+              <Link className='btn btn-outline-light btn-lg' to='/admin/users' role='button'>
+                  Manage users
               </Link>
           </div>
           </div>

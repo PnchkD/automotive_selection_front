@@ -6,8 +6,6 @@ import ErrorHandler from './handler/ErrorHandler.js';
 import ErrorNotifier from './handler/ErrorNotifiers.js';
 
 var jwt = require('jsonwebtoken');
-const roleUser = "ROLE_USER"
-const roleAdmin = "ROLE_ADMIN"
 
 
 class AuthForm extends React.Component {
