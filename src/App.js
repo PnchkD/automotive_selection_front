@@ -8,6 +8,10 @@ import UserList from './users/UserList.js';
 import AdminPage from './admin/AdminPage.js';
 import PersonalPage from './users/PersonalPage.js';
 import UserEdit from './users/UserEdit.js'
+import PasswordRecovery from './users/PasswordRecoveryHandler.js'
+import NewPasswordForm from './users/NewPasswordForm.js'
+import EnterNewPasswordForm from './users/EnterNewPasswordForm.js'
+
 
 class App extends Component {
   state = {
@@ -26,7 +30,10 @@ class App extends Component {
           <Route path='/admin' exact={true} component={AdminPage}/>
           <Route path='/users/me' exact={true} component={PersonalPage}/>
           <Route path='/users/me/:id' exact={true} component={UserEdit}/>
-
+          <Route path='/passwordRecovery' exact={true} component={PasswordRecovery}/>
+          <Route path='/recoveryCode' exact={true} component={NewPasswordForm}/>
+          <Route path='/passwordChange' exact={true} component={EnterNewPasswordForm}/>
+          
         </Switch>
      </Router>
       )

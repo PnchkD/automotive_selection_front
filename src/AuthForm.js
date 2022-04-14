@@ -52,7 +52,7 @@ class AuthForm extends React.Component {
                 }
             },
 			error: function(data){
-                ErrorHandler.runError(data)
+                ErrorHandler.runError(data.responseJSON.message)
             }
 		})
 		event.preventDefault();
@@ -77,7 +77,8 @@ class AuthForm extends React.Component {
 								name="password" value={this.state.password} onChange={this.handleChange} />
 						</div>
 
-						<input className='btn btn-outline-light' type="submit" value="Log in" />
+						<input id="btnAuth" className='btnAuth' type="submit" value="Log in" />
+						<a href="/passwordRecovery">Забыли пароль?</a>
 					</form>
 				</div>
                 <ErrorNotifier />

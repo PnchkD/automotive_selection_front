@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Alert, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
+import { alignPropType } from 'react-bootstrap/esm/types';
 
 const roleUser = "USER"
 const roleAdmin = "ADMIN"
@@ -22,7 +23,7 @@ class AppNavbar extends Component {
     
     localStorage.removeItem("login")
     localStorage.removeItem("id")
-    localStorage.removeItem("role")
+    localStorage.removeItem("roles")
 
     }
 
@@ -35,7 +36,19 @@ class AppNavbar extends Component {
   render() {
     let navItems;
 
-    if(localStorage.getItem("roles").includes(roleAdmin)){ 
+    if(localStorage.getItem("roles")!=null && localStorage.getItem("roles").includes(roleAdmin) && localStorage.getItem("roles").includes(roleUser)){ 
+        navItems = <Nav className="ml-auto" navbar>
+            <NavItem>
+                <NavLink href="/users/me">Me</NavLink>
+            </NavItem>
+            <NavItem>
+                <NavLink padding = "10px" href="/admin/users">Users</NavLink>
+            </NavItem>
+            <NavItem>
+                    <NavLink onClick={this.logout} href="/auth">Log Out</NavLink>
+                </NavItem>
+        </Nav>
+    } else if(localStorage.getItem("roles")!=null && localStorage.getItem("roles").includes(roleAdmin)){ 
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
                 <NavLink padding = "10px" href="/admin/users">Users</NavLink>
@@ -44,7 +57,7 @@ class AppNavbar extends Component {
                     <NavLink onClick={this.logout} href="/auth">Log Out</NavLink>
                 </NavItem>
         </Nav>
-    } else if(localStorage.getItem("roles").includes(roleUser)){
+    } else if(localStorage.getItem("roles")!=null && localStorage.getItem("roles").includes(roleUser)){
         navItems = <Nav className="ml-auto" navbar>
         <NavItem>
             <NavLink href="/users/me">Me</NavLink>
