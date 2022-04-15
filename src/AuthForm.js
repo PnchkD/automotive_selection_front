@@ -1,9 +1,15 @@
 import React from "react";
 import $ from 'jquery';
-import { Label } from 'reactstrap';
 import AppNavbar from './AppNavBar.js';
 import ErrorHandler from './handler/ErrorHandler.js';
 import ErrorNotifier from './handler/ErrorNotifiers.js';
+import 'antd/dist/antd.css';
+import 'ant-design-pro/dist/ant-design-pro.css';
+import { Form, Icon, Input, Checkbox, message } from "antd";
+import {Button} from 'react-bootstrap';
+import loginImg from './login.png'
+
+const FormItem = Form.Item;
 
 var jwt = require('jsonwebtoken');
 
@@ -13,7 +19,8 @@ class AuthForm extends React.Component {
         super(props);
         this.state = {
             login: "",
-            password: ""
+            password: "",
+			autoLogin: true,
         }
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,34 +64,54 @@ class AuthForm extends React.Component {
 		})
 		event.preventDefault();
 	}
+  
 
     render(){
-        
+       
 		return (
 			<div>
 				<AppNavbar/>
-				<div class="container">
-					<form onSubmit={this.handleSubmit}>				
-						<div class="form-group mb-2">
-							<Label className='text-white'>Login</Label>
-							<input type="text" class="form-control"
-								name="login" value={this.state.login} onChange={this.handleChange} />
-						</div>
-
-						<div class="form-group mb-2">
-							<Label className='text-white'>Password</Label>
-							<input type="password" class="form-control"
-								name="password" value={this.state.password} onChange={this.handleChange} />
-						</div>
-
-						<input id="btnAuth" className='btnAuth' type="submit" value="Log in" />
-						<a href="/passwordRecovery">Забыли пароль?</a>
-					</form>
+				<div className="lContainer">
+			<div className="lItem">
+				<div className="loginImage">
+				  <img src={loginImg} width="300" style={{position: 'relative'}} alt="login"/>
 				</div>
-                <ErrorNotifier />
+				<div className="loginForm">
+				  <h2>Login</h2>
+					<Form onSubmit={this.handleSubmit} className="login-form">
+					<FormItem>
+						<Input
+						  prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+						  placeholder="Username"
+						  onChange={this.handleChange}
+						  name="login" value={this.state.login}
+						  required
+						/>
+					</FormItem>
+					<FormItem>
+						<Input
+						  prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+						  type="password"
+						  name="password" value={this.state.password}
+						  placeholder="Password"
+						  onChange={this.handleChange}
+						  required
+						/>
+					</FormItem>
+					<FormItem>
+					  <Button size="sm"
+						type="primary"
+						htmlType="submit"
+						className="login-form-button"
+					  >Log in</Button>
+					</FormItem>
+				  </Form>
+				</div>
 			</div>
-        )
-    }
-}
+			</div>
+			</div>
+		  );
+		}
+	  }
 
 export default AuthForm

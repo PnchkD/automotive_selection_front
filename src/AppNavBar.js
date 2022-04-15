@@ -72,16 +72,16 @@ class AppNavbar extends Component {
             <NavLink href="/auth">Login</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink href="/auth/registration">Registration</NavLink>
+            <NavLink href="/auth/registration">Sing up</NavLink>
         </NavItem>
     </Nav>
     }
 
 
     return <Navbar color="dark" dark expand="md">
-      <NavbarBrand tag={Link} to="/">  Home</NavbarBrand>
+      <NavbarBrand style={{marginLeft:10}} tag={Link} to="/">  Home</NavbarBrand>
       <NavbarToggler onClick={this.toggle}/>
-      <Collapse isOpen={this.state.isOpen} navbar>
+      <Collapse isOpen={this.state.isOpen} navbar style={{float:'right'}}>
           {navItems}
       </Collapse>
     </Navbar>;

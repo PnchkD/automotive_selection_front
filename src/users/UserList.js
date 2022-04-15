@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table } from 'reactstrap';
+import { Button } from 'reactstrap';
 import AppNavbar from '../AppNavBar.js';
 import { Link } from 'react-router-dom';
 import ErrorHandler from '../handler/ErrorHandler.js';
 import ErrorNotifier from '../handler/ErrorNotifiers.js';
 import $ from "jquery";
-import { CheckBox } from 'react-native-web';
-
+import {  Card,Checkbox, List, Divider, Col } from 'antd';
+import { Image } from 'react-bootstrap';
 
 class UserList extends Component {
 
@@ -85,12 +85,11 @@ class UserList extends Component {
 	clickRole(e) {
 		e.preventDefault();
 		let data = new FormData(e.currentTarget);
-		let id =data.get('USER_ID')
+		let id = data.get('USER_ID')
 		let role = data.getAll('ROLE');
 		let sendRoles = {
 			roles: role
 		}
-
 		$.ajax({
 			url: '/api/v1/admin/users/role/' + id,
 			contentType: "application/json; charset=UTF-8",
@@ -108,6 +107,7 @@ class UserList extends Component {
 		}).then(() => {
 			this.componentDidMount();
 		});
+		e.currentTarget.style.display='none';
 	}
 
 	showSortMenu() {
@@ -142,7 +142,6 @@ class UserList extends Component {
 		let firstName = firstNameInput.value;
 		let lastName = lastNameInput.value;
 		let email = emailInput.value;
-		debugger
 		const response = await fetch('/api/v1/admin/users/search?search=firstName:' + firstName + ',lastName:' + lastName + ',email:' + email, {
 			method: 'GET',
 			headers: {
@@ -162,77 +161,75 @@ class UserList extends Component {
 		if (isLoading) {
 			return <p>Loading...</p>;
 		}
-
 		const userList = users.map(user => {
+			const inputAdmin = user.roles.includes("ADMIN") ? 'true' : 'false';
+			const inputUser = user.roles.includes("USER") ? 'true' : 'false';
 			const roles = user.roles.map(role => role.role)
 			const ban = user.bannedDate == null ? "ban" : "unban"
 			user.showRoles = false;
-			
-			return <tr key={user.id} style={{height: 150}} >
-				<td>{user.firstName}</td>
-				<td>{user.lastName}</td>
-				<td>{user.email}</td>
-				<td>{roles.join(" ")}</td>
-				<td>{user.dateOfLastLogin}</td>
-				<td>{user.dateOfApproved}</td>
-				<td>{user.bannedDate}</td>
-				<td>{user.isMailConfirmed}</td>
-				<td>			
-					<ButtonGroup>
-						<Button size="sm" style={{marginRight: 8} } color="danger" onClick={() => this.userBan(user.id, ban)}>{ban}</Button>
-						<Button size="sm" style={{marginRight: 8} } color="primary" onClick={() => this.userConfirm(user.id)}>Confirm</Button>
-						<Button size="sm" style={{marginRight: 8} } color="primary" onClick={this.toogleRole}>Change roles</Button>						
-					</ButtonGroup>
-					<form onSubmit={this.clickRole} className='editRoles' style={{display: 'none'}}>
-						<input name="ROLE" type="checkbox" value="USER"/><span>USER</span>
-						<input name="ROLE" type="checkbox" value="ADMIN"/><span>ADMIN</span>
-						<input type="hidden" name="USER_ID" value={user.id}/>
-						<button size="sm" color="danger" >submit</button>
-					</form>
-				</td>
-			</tr>
+			var re = new RegExp("[0-9][0-9][0-9][0-9][\s-][0-9][0-9][\s-][0-9][0-9]");
+			const userAvatar = user.avatar==null ? "https://th.bing.com/th/id/R.d2c893f55930c7cb5bfe41538be295d7?rik=RCCbETsRGcm2iQ&pid=ImgRaw&r=0" : user.avatar
+		return <div className="site-card-border-less-wrapper">
+			<Card bordered={true} >
+				<Col span={7}>
+					<Image
+					width={320}
+					src={userAvatar}
+    			/>
+				</Col>
+				<Col span={7}>
+					<p><b>First name</b>: {user.firstName}</p>
+					<p><b>Last name</b>: {user.lastName}</p>
+					<p><b>Email</b>: {user.email}</p>
+					<p><b>Roles</b>: {roles.join(" ")}</p>
+					<p><b>Date of last login</b>: {re.exec(user.dateOfLastLogin)}</p>
+					<p><b>Date of approved</b>: {re.exec(user.dateOfApproved)}</p>
+					<p><b>Banned date</b>: {re.exec(user.bannedDate)}</p>
+					<p><b>Date of confirmed mail</b>: {re.exec(user.isMailConfirmed)}</p>
+					</Col>
+					<Col span={6} style={{float:'right'}}>
+						<Button size="sm" style={{marginRight: 8, width:100} } color="danger" onClick={() => this.userBan(user.id, ban)}>{ban}</Button>
+						<Button size="sm" style={{marginRight: 8, width:100}  } color="primary" onClick={() => this.userConfirm(user.id)}>Confirm</Button>
+						<Button size="sm" style={{marginRight: 8, width:100}  } color="primary" onClick={this.toogleRole}>Change roles</Button>						
+						<form onSubmit={this.clickRole} className='editRoles' style={{  display: 'none'}}>
+							<p><Checkbox defaultChecked={inputUser} style={{marginTop: 20, marginLeft:20}} name="ROLE" value="USER">USER</Checkbox></p>
+							<p><Checkbox defaultChecked={inputAdmin} style={{marginTop: 20, marginLeft:20}} name="ROLE" value="ADMIN">ADMIN</Checkbox></p>
+							<input type="hidden" name="USER_ID" value={user.id}/>
+							<Button style={{marginBottom: 20, marginLeft:20}} size="sm" color="danger">submit</Button>
+						</form>
+					</Col>
+			</Card>
+		</div>
 		});
 
 		return (
 			<div>
 				<AppNavbar />
-				<Container fluid>
-					<h3 className='text-white'>User list</h3>
-					<Table className="mt-4">
-						<thead>
-							<tr>
-								<th width="10%">First name</th>
-								<th width="10%">Last name</th>
-								<th width="10%">Email</th>
-								<th width="10%">Roles</th>
-								<th width="10%">Date of last login</th>
-								<th width="10%">Date of approved</th>
-								<th width="10%">Banned date</th>
-								<th width="10%">Mail confirmed</th>
-								<th width="20%">
-									<Button onClick={() => this.showSortMenu()} className="dropbtn">Sort by</Button>
-									<div id="sortDropdown" className="dropdown-content">
-										<a href="#" onClick={() => this.sortBy('firstName')}>First name</a>
-										<a href="#" onClick={() => this.sortBy('lastName')}>Last name</a>
-										<a href="#" onClick={() => this.sortBy('email')}>Email</a>
-										<span><input id="descCheck" style={{marginRight: 8}} name="descending" type="checkbox" value="descending"/>descending</span>
-									</div>
-									<Button onClick={() => this.showSearchMenu()} className="dropbtn">Search by</Button>
-									<div id="searchDropdown" className="dropdown-content">
-										<span>First name<input id="firstNameInput" style={{marginLeft: 10}} name="firstName" type="text"/></span>
-										<span>Last name<input id="lastNameInput" style={{marginLeft: 10}} name="lastName" type="text"/></span>
-										<span>Email<input id="emailInput" style={{marginLeft: 10}} name="email" type="text"/></span>
-										<Button onClick={() => this.searchBy()} className="searchbtn" color="danger">search</Button>
-									</div>
-								</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{userList}
-						</tbody>
-					</Table>
-				</Container>
+					 <Divider style={{fontSize:40}} orientation="left">Users</Divider>
+					 <div style={{ marginLeft:30}}>
+									<Button onClick={() => this.showSortMenu()} style={{ marginRight:20}} color="primary">Sort by</Button>
+										<div id="sortDropdown" className="dropdown-content">
+											<a href="#" onClick={() => this.sortBy('firstName')}>First name</a>
+											<a href="#" onClick={() => this.sortBy('lastName')}>Last name</a>
+											<a href="#" onClick={() => this.sortBy('email')}>Email</a>
+											<span><input id="descCheck" style={{marginRight: 8}} name="descending" type="checkbox" value="descending"/>descending</span>
+										</div>
+										<Button onClick={() => this.showSearchMenu()} color="primary">Search by</Button>
+										<div id="searchDropdown" className="dropdown-content">
+											<span>First name<input id="firstNameInput" style={{marginLeft: 10}} name="firstName" type="text"/></span>
+											<span>Last name<input id="lastNameInput" style={{marginLeft: 10}} name="lastName" type="text"/></span>
+											<span>Email<input id="emailInput" style={{marginLeft: 10}} name="email" type="text"/></span>
+											<Button onClick={() => this.searchBy()} className="searchbtn" color="danger">search</Button>
+										</div>
+								</div>
+						<List
+						dataSource={userList}
+						renderItem={user => (
+							<List.Item>
+								{user}
+							</List.Item>
+						)}
+						/>
 				<ErrorNotifier/>
 			</div>
 		);

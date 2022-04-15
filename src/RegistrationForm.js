@@ -4,6 +4,11 @@ import AppNavbar from './AppNavBar.js'
 import $ from 'jquery';
 import ErrorHandler from './handler/ErrorHandler.js';
 import ErrorNotifier from './handler/ErrorNotifiers.js';
+import { Form, Icon, Input, Checkbox, message } from "antd";
+import {Button} from 'react-bootstrap';
+import loginImg from './registration.png'
+const FormItem = Form.Item;
+
 
 var history
 
@@ -52,47 +57,64 @@ class NameForm extends React.Component {
 
 	render() {
 		return (
+
 			<div>
 				<AppNavbar/>
-				<div class="container">
-					<form onSubmit={this.handleSubmit}>
-
-						<div class="form-group mb-2">
-							<label class="form-label">First Name</label>
-							<input type="text" class="form-control"
-								name="firstName" value={this.state.firstName} onChange={this.handleChange} />
-						</div>
-
-						<div class="form-group mb-2">
-							<label class="form-label">Last Name</label>
-							<input type="text" class="form-control"
-								name="lastName" value={this.state.lastName} onChange={this.handleChange} />
-						</div>
-
-						<div class="form-group mb-2">
-							<label class="form-label">Login</label>
-							<input type="text" class="form-control"
-								name="login" value={this.state.login} onChange={this.handleChange} />
-						</div>
-						
-						<div class="form-group mb-2">
-							<label class="form-label">Email</label>
-							<input type="text" class="form-control"
-								name="email" value={this.state.email} onChange={this.handleChange} />
-						</div>
-
-						<div class="form-group mb-2">
-							<label class="form-label">Password</label>
-							<input type="password" class="form-control"
-								name="password" value={this.state.password} onChange={this.handleChange} />
-						</div>
-
-						<div className="d-grid gap-2">
-							<input className='btn btn-outline-light btn-lg' type="submit" value="Register" />
-						</div>
-					</form>
+				<div className="lContainer">
+			<div className="lItem">
+				<div className="loginImage">
+				  <img src={loginImg} width="150" style={{marginLeft:80, position: 'center'}} alt="registration"/>
 				</div>
-                <ErrorNotifier />
+				<div className="loginForm">
+				  <h2>Registration</h2>
+					<Form onSubmit={this.handleSubmit} className="login-form">
+					<FormItem>
+						<Input
+						  prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+						  placeholder="First name"
+						  onChange={this.handleChange}
+						  name="firstName" value={this.state.firstName}
+						  required
+						/>
+						<Input
+						  prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+						  placeholder="Last name"
+						  onChange={this.handleChange}
+						  name="lastName" value={this.state.lastName}
+						  required
+						/>
+						<Input
+						  prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+						  placeholder="Email"
+						  onChange={this.handleChange}
+						  name="email" value={this.state.email}
+						  required
+						/>
+						<Input
+						  prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+						  placeholder="Login"
+						  onChange={this.handleChange}
+						  name="login" value={this.state.login}
+						  required
+						/>
+						<Input
+						  prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+						  type="password"
+						  name="password" value={this.state.password}
+						  placeholder="Password"
+						  onChange={this.handleChange}
+						  required
+						/>
+					  <Button size="sm"
+						type="primary"
+						htmlType="submit"
+						className="login-form-button"
+					  >Sing up</Button>
+					</FormItem>
+				  </Form>
+				</div>
+			</div>
+			</div>
 			</div>
 		);
 	}
