@@ -103,8 +103,10 @@ class AuthForm extends React.Component {
 						type="primary"
 						htmlType="submit"
 						className="login-form-button"
-					  >Log in</Button>
+					  	>Log in</Button>
+						<a style={{ float:'right' }} href="/passwordRecovery">Забыли пароль?</a>
 					</FormItem>
+					
 				  </Form>
 				</div>
 			</div>

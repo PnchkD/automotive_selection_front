@@ -170,7 +170,7 @@ class UserList extends Component {
 			var re = new RegExp("[0-9][0-9][0-9][0-9][\s-][0-9][0-9][\s-][0-9][0-9]");
 			const userAvatar = user.avatar==null ? "https://th.bing.com/th/id/R.d2c893f55930c7cb5bfe41538be295d7?rik=RCCbETsRGcm2iQ&pid=ImgRaw&r=0" : user.avatar
 		return <div className="site-card-border-less-wrapper">
-			<Card bordered={true} >
+			<Card style={{boxShadow:'0px 8px 16px 8px rgba(0,0,0,0.2)'}} bordered={true} >
 				<Col span={7}>
 					<Image
 					width={320}

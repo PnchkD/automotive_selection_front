@@ -1,27 +1,37 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Container, Button, Card, Row, ButtonGroup} from 'react-bootstrap'
+import { Container, Button, Row, ButtonGroup, Nav, NavLink, NavItem, TabContent, TabPane, Image} from 'react-bootstrap'
 import {Input,  Label, FormGroup} from 'reactstrap';
 import AppNavbar from '../AppNavBar.js';
 import $ from 'jquery';
+import { Card, Col, Form, Divider, Upload } from 'antd';
 import ErrorHandler from '../handler/ErrorHandler';
+import ErrorNotifier from '../handler/ErrorNotifiers.js';
+import ImageLoader from "../util/ImageLoader";
 
 let thisObj; 
 
-class MePage extends Component {
+class PersonalPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             login : localStorage.getItem("login"),
             id : localStorage.getItem("id"),
-            role : localStorage.getItem("role"),
-            user: null,
+            roles : localStorage.getItem("roles"),
+            user: {
+                firstName: "",
+                lastName: "",
+                email: "",
+                avatar: ""
+            },
             isLoading: true,
             }
 
-            this.logout = this.logout.bind(this)
-            this.myReservations = this.myReservations.bind(this)
-            this.upload = this.upload.bind(this)
+            this.logout = this.logout.bind(this);
+            this.handleChange = this.handleChange.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
+            this.changePassword = this.changePassword.bind(this)
+            this.toogleRole = this.toogleRole.bind(this);
 
             thisObj = this
         }
@@ -29,7 +39,7 @@ class MePage extends Component {
     async componentDidMount() {
         $.ajax({
             method: "Get",
-            url: "/me",
+            url: "/api/v1/users/" + this.state.id,
             headers: {
                 "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
               },
@@ -54,30 +64,89 @@ class MePage extends Component {
         this.props.history.push('/auth');
     }
 
-    myReservations() {
-        this.props.history.push('/users/reservations/' + localStorage.getItem("id"));
+    changePassword(event) {
+        debugger
+        event.preventDefault();
+		const data = new FormData(event.currentTarget);
+        const password = {
+            login: localStorage.getItem('login'),
+            oldPassword: data.get('oldPassword'),
+            newPassword: data.get('newPassword'),
+            confirmedPassword: data.get('confirmedPassword')
+        }
+        $.ajax({
+            url: '/api/v1/users/' + localStorage.getItem('id') + '/credentials',
+            method: "PATCH",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
+            },
+            data: JSON.stringify(password),
+            success: function(data){
+                ErrorHandler.runSuccess(data)
+            },
+			error: function(data){
+                ErrorHandler.runError(data.responseJSON.httpCode, data.responseJSON.errorDescription)
+            }
+        })
+	}
+
+    toogleRole(e) {
+        let block = e.currentTarget.parentElement.parentElement.querySelector('.newPassword');
+        if(block.style.display == 'none') {
+            block.style.display = 'block';
+            block.style.position = 'relative';
+        } else {
+            block.style.display = 'none';
+        }
     }
 
-    upload(event) {
-		let target = event.target
-		console.log(target)
-		const fileInput = document.querySelector("#userImages");
-		const formData = new FormData();
+    handleChange(event) {
+        const target = event.target;
+        const name = target.name;
+        let value = target.value;
+        let user = { ...this.state.user };
 
-        for(let photo of fileInput.files){
-            formData.append('photos', photo);
+        user[name] = value;
+        this.setState({ user: user });
+    }
+
+    async handleSubmit(event) {
+        event.preventDefault();
+        let data = {
+            firstName : this.state.user.firstName,
+            lastName :  this.state.user.lastName,
+            email : this.state.user.email
         }
-	
-		fetch("/resources/users/" + this.state.id, {
-			method: "POST",
-			body: formData,
-			headers: {
-				"Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-			}
-		}).then(function(){
-            window.location.reload ();
-        });
-	}
+
+        $.ajax({
+            url: '/api/v1/users/' + localStorage.getItem('id'),
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
+            },
+            data: JSON.stringify(data)
+        })
+    }
+
+    handleImageUrlChange = (imageUrl) => {
+        this.state.user.avatar = imageUrl;
+        const newAvatar = {
+            image: imageUrl
+        }
+        $.ajax({
+            url: "/api/v1/users/" + this.state.id + "/avatar",
+            method: "PATCH",
+            data: JSON.stringify(newAvatar),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
+        }})
+    }
 
     render() {
 
@@ -87,33 +156,61 @@ class MePage extends Component {
 			return <p>Loading...</p>;
 		}
 
-        if(this.state.login == null || this.state.role == null || this.state.id == null){
+        if(this.state.login == null || this.state.roles == null || this.state.id == null){
             return <div><h1>Unauthorized</h1></div>
         }
 
 
-        const avatar = user.avatar !== null ?   <Card > 
-                                                    <Card.Img src={"/resources/users/" + user.id + "/photos/" + user.avatar.id}/>
-                                                </Card> 
-                                                : ""
+        return <div>
+                    <AppNavbar/>
+                        <Card>
+                            <Col xs={2} sm={4} md={6} lg={8} xl={7}>
+                                <ImageLoader
+                                    imageUrl={this.state.user.avatar}
+                                    handleImageUrlChange={this.handleImageUrlChange}
+                                />
+                            </Col>
+                            <Col xs={1}></Col>
 
-        return <div className="d-grid gap-2">
-                    {avatar}
-                    <h1 className='text-white'>{this.state.login}</h1>
-                    <ButtonGroup>
-                        <h4 className='text-white'>Set avatar:</h4>
-                        <Input className='text-white' color="primary" type="file" name="image" id={"userImages"} multiple></Input>
-                        <Button className='btn btn-outline-light btn-lg' onClick={this.upload}> Confirm</Button>
-                    </ButtonGroup>
-                    <Button className='btn btn-outline-light btn-lg' variant="success" onClick={this.myReservations}>
-                        My reservations
-                    </Button>
-                    <Button className='btn btn-outline-light btn-lg' variant="danger" onClick={this.logout}>
-                        Logout
-                    </Button>
-                    
+                        <Col xs={20} sm={16} md={16} lg={8} xl={14}>
+                            <Card style={{boxShadow:'0px 8px 16px 8px rgba(0,0,0,0.2)'}} bordered={true}>
+                                    <Divider style={{fontSize:30}} orientation="left">Personal data</Divider>
+                                    <Form onSubmit={this.handleSubmit}>
+                                        <FormGroup>
+                                            <Label style={{marginBottom:10}} for="email">Email</Label>
+                                            <Input style={{marginBottom:20}} type="text" name="email" id="email" value={user.email || ''}
+                                                onInput={this.handleChange} autoComplete="email" />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label style={{marginBottom:10}} for="firstName">First Name</Label>
+                                            <Input style={{marginBottom:20}} type="text" name="firstName" id="firstName" value={user.firstName || ''}
+                                                onInput={this.handleChange} autoComplete="firstName" />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label style={{marginBottom:10}} for="lastName">Last Name</Label>
+                                            <Input style={{marginBottom:20}} type="text" name="lastName" id="lastName" value={user.lastName || ''}
+                                                onInput={this.handleChange} autoComplete="lastName" />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Button style={{marginRight:20, width:100}} color="primary" type="submit">Save</Button>{' '}                                           
+                                        </FormGroup>
+                                    </Form>
+                                    <Button style={{marginTop:30, width:230, height:40}} size="sm" color="primary" onClick={this.toogleRole}>Change password</Button>
+                                    <Form onSubmit={this.changePassword} className='newPassword' style={{display: 'none', marginTop:30}}>
+                                                <Label style={{marginTop:10, marginLeft:20}} for="lastName">Old password</Label>
+                                                <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="oldPassword"></Input>
+                                                <Label style={{marginTop:10, marginLeft:20}} for="lastName">New password</Label>
+                                                <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="newPassword"></Input>
+                                                <Label style={{marginTop:10, marginLeft:20}} for="lastName">Confirm password</Label>
+                                                <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="confirmedPassword"></Input>
+                                                <Button style={{marginTop: 20, marginBottom: 20, marginLeft:20}} type="submit">Confirm</Button>
+                                            </Form>
+                                </Card>
+                        </Col>
+                        </Card>
+                <ErrorNotifier />
                 </div>
     }
 }
 
-export default withRouter(MePage);
+export default PersonalPage;
