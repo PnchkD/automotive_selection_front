@@ -11,7 +11,7 @@ import loginImg from './login.png'
 
 const FormItem = Form.Item;
 
-var jwt = require('jsonwebtoken');
+import jwt from 'jwt-decode'
 
 
 class AuthForm extends React.Component {
@@ -49,7 +49,7 @@ class AuthForm extends React.Component {
                     localStorage.setItem('tokenType', data.tokenType);
                     localStorage.setItem('expiresIn', data.expiresIn);
 
-					let decodedToken = jwt.decode(data.accessToken);
+					let decodedToken = jwt(data.accessToken);
 					console.log(decodedToken)
                     localStorage.setItem('login', decodedToken.sub);
                     localStorage.setItem('roles', decodedToken.roles);

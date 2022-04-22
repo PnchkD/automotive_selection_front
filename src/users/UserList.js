@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import AppNavbar from '../AppNavBar.js';
-import { Link } from 'react-router-dom';
 import ErrorHandler from '../handler/ErrorHandler.js';
 import ErrorNotifier from '../handler/ErrorNotifiers.js';
 import $ from "jquery";
@@ -35,7 +34,7 @@ class UserList extends Component {
 		this.setState({ users: body.usersDTO, isLoading: false });
 	}
 
-	async userBan(id, ban) {
+	userBan(id, ban) {
 		$.ajax({
 			url: '/api/v1/admin/users/' + ban + '/' + id,
 			contentType: "application/json; charset=UTF-8",
@@ -54,7 +53,7 @@ class UserList extends Component {
 		});
 	}
 
-	async userConfirm(id) {
+	userConfirm(id) {
 		$.ajax({
 			url: '/api/v1/admin/users/confirm/' + id,
 			contentType: "application/json; charset=UTF-8",

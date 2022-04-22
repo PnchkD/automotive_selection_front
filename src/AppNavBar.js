@@ -39,40 +39,40 @@ class AppNavbar extends Component {
     if(localStorage.getItem("roles")!=null && localStorage.getItem("roles").includes(roleAdmin) && localStorage.getItem("roles").includes(roleUser)){ 
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
-                <NavLink href="/users/me">Me</NavLink>
+                <NavLink tag={Link} to="/users/me">Me</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink padding = "10px" href="/admin/users">Users</NavLink>
+                <NavLink padding = "10px" tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
             <NavItem>
-                    <NavLink onClick={this.logout} href="/auth">Log Out</NavLink>
+                    <NavLink onClick={this.logout} to="/auth">Log Out</NavLink>
                 </NavItem>
         </Nav>
     } else if(localStorage.getItem("roles")!=null && localStorage.getItem("roles").includes(roleAdmin)){ 
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
-                <NavLink padding = "10px" href="/admin/users">Users</NavLink>
+                <NavLink padding = "10px" tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
             <NavItem>
-                    <NavLink onClick={this.logout} href="/auth">Log Out</NavLink>
+                  <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
                 </NavItem>
         </Nav>
     } else if(localStorage.getItem("roles")!=null && localStorage.getItem("roles").includes(roleUser)){
         navItems = <Nav className="ml-auto" navbar>
         <NavItem>
-            <NavLink href="/users/me">Me</NavLink>
+            <NavLink tag={Link} to="/users/me">Me</NavLink>
         </NavItem>
         <NavItem>
-                    <NavLink onClick={this.logout} href="/auth">Log Out</NavLink>
+              <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
         </NavItem>
     </Nav>
     } else {
         navItems = <Nav className="ml-auto" navbar>
         <NavItem>
-            <NavLink href="/auth">Login</NavLink>
+            <NavLink tag={Link} to="/auth">Login</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink href="/auth/registration">Sing up</NavLink>
+            <NavLink tag={Link} to="/auth/registration">Sing up</NavLink>
         </NavItem>
     </Nav>
     }
