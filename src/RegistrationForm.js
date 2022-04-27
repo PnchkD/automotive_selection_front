@@ -40,7 +40,7 @@ class NameForm extends React.Component {
 
 	handleSubmit(event) {
 		$.ajax({
-			url: "/api/v1/auth/registration",
+			url: "http://localhost:8080/api/v1/auth/registration",
 			contentType: "application/json; charset=UTF-8",
 			method: "post",
 			data: JSON.stringify(this.state),

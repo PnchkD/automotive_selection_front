@@ -42,15 +42,11 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
                 loader: "babel-loader"
             }
         ]
     },
     resolve: {
-        fallback: {
-            path: path.join(__dirname, './node_modules')
-        },
         extensions: [".js", ".ts", ".tsx"]
       },
     plugins: [

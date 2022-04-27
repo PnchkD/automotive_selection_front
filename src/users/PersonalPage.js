@@ -39,7 +39,7 @@ class PersonalPage extends Component {
     async componentDidMount() {
         $.ajax({
             method: "Get",
-            url: "/api/v1/users/" + this.state.id,
+            url: "http://localhost:8080/api/v1/users/" + this.state.id,
             headers: {
                 "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
               },
@@ -75,7 +75,7 @@ class PersonalPage extends Component {
             confirmedPassword: data.get('confirmedPassword')
         }
         $.ajax({
-            url: '/api/v1/users/' + localStorage.getItem('id') + '/credentials',
+            url: 'http://localhost:8080/api/v1/users/' + localStorage.getItem('id') + '/credentials',
             method: "PATCH",
             headers: {
                 'Accept': 'application/json',
@@ -121,7 +121,7 @@ class PersonalPage extends Component {
         }
 
         $.ajax({
-            url: '/api/v1/users/' + localStorage.getItem('id'),
+            url: 'http://localhost:8080/api/v1/users/' + localStorage.getItem('id'),
             method: "PUT",
             headers: {
                 'Accept': 'application/json',
@@ -138,7 +138,7 @@ class PersonalPage extends Component {
             image: imageUrl
         }
         $.ajax({
-            url: "/api/v1/users/" + this.state.id + "/avatar",
+            url: "http://localhost:8080/api/v1/users/" + this.state.id + "/avatar",
             method: "PATCH",
             data: JSON.stringify(newAvatar),
             headers: {

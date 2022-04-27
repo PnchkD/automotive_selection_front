@@ -12,6 +12,7 @@ import loginImg from './login.png'
 const FormItem = Form.Item;
 
 import jwt from 'jwt-decode'
+import { Link } from "react-router-dom";
 
 
 class AuthForm extends React.Component {
@@ -39,7 +40,7 @@ class AuthForm extends React.Component {
     handleSubmit(event) {
 		let props = this.props;
 		$.ajax({
-			url: "/api/v1/auth",
+			url: "http://localhost:8080/api/v1/auth",
 			contentType: "application/json; charset=UTF-8",
 			method: "post",
 			data: JSON.stringify(this.state),
@@ -104,7 +105,7 @@ class AuthForm extends React.Component {
 						htmlType="submit"
 						className="login-form-button"
 					  	>Log in</Button>
-						<a style={{ float:'right' }} href="/passwordRecovery">Забыли пароль?</a>
+						<Link style={{ float:'right' }} to="/passwordRecovery" role={'link'}>Забыли пароль?</Link>
 					</FormItem>
 					
 				  </Form>

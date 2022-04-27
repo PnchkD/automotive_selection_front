@@ -22,7 +22,7 @@ class UserList extends Component {
 	}
 
 	async componentDidMount() {
-		const response = await fetch("/api/v1/admin/users", {
+		const response = await fetch("http://localhost:8080/api/v1/admin/users", {
 			method: 'GET',
 			headers: {
 				'Accept': 'application/json',
@@ -36,7 +36,7 @@ class UserList extends Component {
 
 	userBan(id, ban) {
 		$.ajax({
-			url: '/api/v1/admin/users/' + ban + '/' + id,
+			url: 'http://localhost:8080/api/v1/admin/users/' + ban + '/' + id,
 			contentType: "application/json; charset=UTF-8",
 			method: "patch",
             headers:{
@@ -55,7 +55,7 @@ class UserList extends Component {
 
 	userConfirm(id) {
 		$.ajax({
-			url: '/api/v1/admin/users/confirm/' + id,
+			url: 'http://localhost:8080/api/v1/admin/users/confirm/' + id,
 			contentType: "application/json; charset=UTF-8",
 			method: "patch",
             headers:{
@@ -90,7 +90,7 @@ class UserList extends Component {
 			roles: role
 		}
 		$.ajax({
-			url: '/api/v1/admin/users/role/' + id,
+			url: 'http://localhost:8080/api/v1/admin/users/role/' + id,
 			contentType: "application/json; charset=UTF-8",
 			method: "patch",
 			data: JSON.stringify(sendRoles),
@@ -121,7 +121,7 @@ class UserList extends Component {
 	async sortBy(name) {
 		let inputDesc = document.getElementById("descCheck");
 		let desc = inputDesc.checked ? 'true' : 'false';
-		const response = await fetch('/api/v1/admin/users?sortBy=' + name + '&desc=' + desc, {
+		const response = await fetch('http://localhost:8080/api/v1/admin/users?sortBy=' + name + '&desc=' + desc, {
 			method: 'GET',
 			headers: {
 				'Accept': 'application/json',
@@ -141,7 +141,7 @@ class UserList extends Component {
 		let firstName = firstNameInput.value;
 		let lastName = lastNameInput.value;
 		let email = emailInput.value;
-		const response = await fetch('/api/v1/admin/users/search?search=firstName:' + firstName + ',lastName:' + lastName + ',email:' + email, {
+		const response = await fetch('http://localhost:8080/api/v1/admin/users/search?search=firstName:' + firstName + ',lastName:' + lastName + ',email:' + email, {
 			method: 'GET',
 			headers: {
 				'Accept': 'application/json',

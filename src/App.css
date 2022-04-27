@@ -177,6 +177,10 @@
   width:300px;
 }
 
+.ReqItem {
+  width:600px;
+}
+
 .loginForm {
   background-color: white;
   padding-left: 30px;
@@ -190,6 +194,19 @@
 .loginImage {
   margin-top: -90px;
   margin-bottom: 70px;
+}
+
+.pasReqForm {
+    background-color: white;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 20px;
+    margin-top: -60px;
+    margin-left:-30px;
+    margin-right:-30px;
+    border-radius: 8px;
+    border: 1px solid #d8d8da;
+    text-align: center;
 }
 
 tbody {

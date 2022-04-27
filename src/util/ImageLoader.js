@@ -1,6 +1,4 @@
 import React, {Component} from 'react'
-import LoadingOutlined from '@ant-design/icons/lib/outline/LoadingOutline'
-import InboxOutlined from '@ant-design/icons/lib/outline/InboxOutline'
 import {beforeUpload, getBase64} from './pictureLoaderUtil'
 import {Upload} from 'antd'
 
