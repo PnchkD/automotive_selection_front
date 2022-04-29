@@ -1,78 +1,114 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
-import AppNavbar from '../AppNavBar.js'
+import AppNavbar from '../app/AppNavBar.js'
 import $ from 'jquery';
 import ErrorHandler from '../handler/ErrorHandler.js';
-import ErrorNotifier from '../handler/ErrorNotifiers';
-import { Form, Input, Divider } from 'antd';
+import ErrorNotifier from '../handler/ErrorNotifiers.js';
+import { Form, Icon, Input, Divider } from 'antd';
 import {Button} from 'react-bootstrap';
-import { MailOutlined } from '@ant-design/icons';
+import { LockOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from '../constants/constants.js';
+import { changePassword } from '../services/auth/AuthService.js';
 const FormItem = Form.Item;
 
 var history
-
-class NewPasswordForm extends React.Component {
+class EnterNewPasswordForm extends React.Component {
       constructor(props) {
         super(props);
           this.state = {
-            code: ''
+            login: '',
+            newPassword: '',
+            confirmedPassword: ''
           }
-        this.onCodeChange = this.onCodeChange.bind(this);
+        this.onLoginChange = this.onLoginChange.bind(this);
+        this.onNewPasswordChange = this.onNewPasswordChange.bind(this);
+        this.onConfirmedPasswordChange = this.onConfirmedPasswordChange.bind(this);
         this.onSigninSubmit = this.onSigninSubmit.bind(this);
 
         history = this.props.history;
+      }    
+
+      onLoginChange(e) {
+        this.setState({
+            login: e.target.value
+        })
       }  
 
-      onCodeChange(e) {
+      onNewPasswordChange(e) {
         this.setState({
-            code: e.target.value
+            newPassword: e.target.value
+        })
+      }  
+
+      onConfirmedPasswordChange(e) {
+        this.setState({
+            confirmedPassword: e.target.value
         })
       }  
      
       onSigninSubmit(e) {
-          $.ajax({
-              url: "http://localhost:8080/api/v1/auth/password_recovery/code/" + this.state.code,
-              contentType: "application/json; charset=UTF-8",
-              method: "get",
-              success: function(data){
-                  history.push('/passwordChange');
-              },
-              error: function(data){
-                  ErrorHandler.runError(data.responseJSON.message)
-              }
+        changePassword(this.state)
+          .then(() => {
+            history.push('/auth');
           })
           e.preventDefault();
       }
   
       render() {
-        return(	<div>
+        return(<div>
           <AppNavbar/>
             <div className="lContainer">
               <div className="ReqItem">
                   <div className="pasReqForm">
-                    <MailOutlined />
-                    <Divider style={{fontSize:20}}>Check your email</Divider>
+                    <LockOutlined />
+                    <Divider style={{fontSize:20}}>Enter new password</Divider>
                     <Form onSubmit={this.onSigninSubmit} >
                     <FormItem>
                       <Input
-                        id="code"
-                        label="Code"
-                        name="code"
-                        autoComplete="code"
+                        prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+                        id="login"
+                        label="Login"
+                        name="login"
+                        autoComplete="login"
                         autoFocus
-                        placeholder="Enter recovery code"
-                        onChange={this.onCodeChange}
-                        value={this.state.code}
+                        placeholder="Login"
+                        onChange={this.onLoginChange}
+                        value={this.state.login}
+                        required
+                      />
+                      <Input
+                      	prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+                        name="newPassword"
+                        label="New password"
+                        type="password"
+                        id="newPassword"
+                        autoComplete="newPassword"
+                        placeholder="New password"
+                        onChange={this.onNewPasswordChange}
+                        value={this.state.newPassword}
+                        required
+                      />
+                      <Input
+                      	prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+                        name="confirmedPassword"
+                        label="Confirmed password"
+                        type="password"
+                        id="confirmedPassword"
+                        autoComplete="confirmedPassword"
+                        placeholder="Confirmed password"
+                        onChange={this.onConfirmedPasswordChange}
+                        value={this.state.confirmedPassword}
                         required
                       />
                       <Button size="sm"
                         type="primary"
                         htmlType="submit"
-                        className="login-form-button"
-                      >Confirm code</Button>
-                      <Link style={{float:'left'}} to='/auth'>Back</Link>
-                      <Link style={{float:'right'}} to='/auth/registration'>Sing up</Link>
+                        className="login-form-button">
+                      Confirm password
+                    </Button>
+                      <Link style={{float:'left'}} to='/auth'>Sing in</Link>
+                      <Link style={{float:'right'}} to='/auth/registration'>Registration</Link>
                     </FormItem>
                     </Form>
                   </div>
@@ -84,4 +120,4 @@ class NewPasswordForm extends React.Component {
       }
 }
 
-export default NewPasswordForm
+export default EnterNewPasswordForm

@@ -1,7 +1,6 @@
 import $ from "jquery"
 
 var showCounter = 0;
-var successShowCounter = 0;
 
 class ErrorHandler{
 

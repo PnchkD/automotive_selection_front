@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {beforeUpload, getBase64} from './pictureLoaderUtil'
 import {Upload} from 'antd'
-
+import { USER_BASE_AVATAR, IMAGE_LOADER_MOCKY_URL } from '../constants/constants';
 const {Dragger} = Upload
 
 export default class ImageLoader extends Component {
@@ -18,19 +18,19 @@ export default class ImageLoader extends Component {
             <>
                 <aside className="aside-picture">
                     <Dragger
+                        style={{width:600, boxShadow:'0px 8px 16px 0px rgba(0,0,0,0.2)'}} 
                         name="file"
                         listType="picture"
                         showUploadList={false}
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                        action={IMAGE_LOADER_MOCKY_URL}
                         beforeUpload={beforeUpload}
                         onChange={this.handleUploadImageChange}>
-
                         {
                             this.state.imageUrl ?
                                 <img src={this.state.imageUrl}
-                                     alt=""
+                                     alt="avatar"
                                 />
-                                : <img src="https://th.bing.com/th/id/R.d2c893f55930c7cb5bfe41538be295d7?rik=RCCbETsRGcm2iQ&pid=ImgRaw&r=0" alt=''/>
+                                : <img src={USER_BASE_AVATAR} alt='avatar'/>
                         }
 
                         <p className="ant-upload-text">

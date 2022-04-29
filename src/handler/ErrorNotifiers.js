@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../App.css';
+import '../app/App.css';
 import {Alert} from 'reactstrap';
 
 class ErrorNotifier extends Component {

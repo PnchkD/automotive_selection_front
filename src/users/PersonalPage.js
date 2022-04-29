@@ -1,99 +1,76 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Container, Button, Row, ButtonGroup, Nav, NavLink, NavItem, TabContent, TabPane, Image} from 'react-bootstrap'
 import {Input,  Label, FormGroup} from 'reactstrap';
-import AppNavbar from '../AppNavBar.js';
-import $ from 'jquery';
-import { Card, Col, Form, Divider, Upload } from 'antd';
+import AppNavbar from '../app/AppNavBar.js';
+import { Card, Form, Avatar, Modal, Divider, Layout } from 'antd';
 import ErrorHandler from '../handler/ErrorHandler';
 import ErrorNotifier from '../handler/ErrorNotifiers.js';
 import ImageLoader from "../util/ImageLoader";
-
+import { USER_ID, USER_LOGIN, USER_ROLES, USER_ICON } from '../constants/constants.js';
+import { changeAvatar, changePassword, changePersonalData, loadUser } from '../services/user/UserService.js';
+import { EditOutlined, LockOutlined } from '@ant-design/icons';
+const { Header, Footer, Sider, Content } = Layout;
+const { Meta } = Card;
 let thisObj; 
 
 class PersonalPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            login : localStorage.getItem("login"),
-            id : localStorage.getItem("id"),
-            roles : localStorage.getItem("roles"),
+            login : localStorage.getItem(USER_LOGIN),
+            id : localStorage.getItem(USER_ID),
+            roles : localStorage.getItem(USER_ROLES),
             user: {
                 firstName: "",
                 lastName: "",
                 email: "",
                 avatar: ""
             },
-            isLoading: true,
+                isLoading: true,
+                isDataModalVisible: false,
+                isPasswordModalVisible: false
             }
 
-            this.logout = this.logout.bind(this);
             this.handleChange = this.handleChange.bind(this);
             this.handleSubmit = this.handleSubmit.bind(this);
             this.changePassword = this.changePassword.bind(this)
             this.toogleRole = this.toogleRole.bind(this);
+            this.showDataModal = this.showDataModal.bind(this);
+            this.handleDataOk = this.handleDataOk.bind(this);
+            this.handleDataCancel = this.handleDataCancel.bind(this);
+            this.showPasswordModal = this.showPasswordModal.bind(this);
+            this.handlePasswordOk = this.handlePasswordOk.bind(this);
+            this.handlePasswordCancel = this.handlePasswordCancel.bind(this);
 
             thisObj = this
         }
 
     async componentDidMount() {
-        $.ajax({
-            method: "Get",
-            url: "http://localhost:8080/api/v1/users/" + this.state.id,
-            headers: {
-                "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-              },
-            success: function(data){
+        loadUser(this.state.id)
+            .then(data => {
                 thisObj.setState({ user: data, isLoading: false  });
-            },
-            error: function(data){
-                ErrorHandler.runError(data)
-            }
-        })
-    }
-
-    logout() {
-        localStorage.removeItem("accessToken")
-        localStorage.removeItem("tokenType")
-        localStorage.removeItem("expiresIn")
-        
-        localStorage.removeItem("login")
-        localStorage.removeItem("id")
-        localStorage.removeItem("role")
-
-        this.props.history.push('/auth');
+            })
     }
 
     changePassword(event) {
-        debugger
         event.preventDefault();
+
 		const data = new FormData(event.currentTarget);
-        const password = {
-            login: localStorage.getItem('login'),
+        const newPasswordRequest = {
+            login: localStorage.getItem(USER_LOGIN),
             oldPassword: data.get('oldPassword'),
             newPassword: data.get('newPassword'),
             confirmedPassword: data.get('confirmedPassword')
         }
-        $.ajax({
-            url: 'http://localhost:8080/api/v1/users/' + localStorage.getItem('id') + '/credentials',
-            method: "PATCH",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-            },
-            data: JSON.stringify(password),
-            success: function(data){
+
+        changePassword(newPasswordRequest, localStorage.getItem(USER_ID))
+            .then(() => {
                 ErrorHandler.runSuccess(data)
-            },
-			error: function(data){
-                ErrorHandler.runError(data.responseJSON.httpCode, data.responseJSON.errorDescription)
-            }
-        })
+            })
 	}
 
     toogleRole(e) {
-        let block = e.currentTarget.parentElement.parentElement.querySelector('.newPassword');
+        debugger
+        let block = e.currentTarget.parentElement.parentElement.parentElement.parentElement.querySelector('.newPassword');
         if(block.style.display == 'none') {
             block.style.display = 'block';
             block.style.position = 'relative';
@@ -114,22 +91,19 @@ class PersonalPage extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        let data = {
+
+        const personalDataRequest = {
             firstName : this.state.user.firstName,
             lastName :  this.state.user.lastName,
             email : this.state.user.email
         }
 
-        $.ajax({
-            url: 'http://localhost:8080/api/v1/users/' + localStorage.getItem('id'),
-            method: "PUT",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-            },
-            data: JSON.stringify(data)
-        })
+        changePersonalData(personalDataRequest, localStorage.getItem('id'))
+            .then(data => {
+                ErrorHandler.runSuccess(data.message);
+            }).then(() => {
+                this.componentDidMount();
+            })
     }
 
     handleImageUrlChange = (imageUrl) => {
@@ -137,16 +111,62 @@ class PersonalPage extends Component {
         const newAvatar = {
             image: imageUrl
         }
-        $.ajax({
-            url: "http://localhost:8080/api/v1/users/" + this.state.id + "/avatar",
-            method: "PATCH",
-            data: JSON.stringify(newAvatar),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-        }})
+
+        changeAvatar(newAvatar, this.state.id)
+            .then(data => {
+                ErrorHandler.runSuccess(data.message);
+            })
     }
+
+    showDataModal = () => {
+        this.setState({isDataModalVisible: true});
+      };
+
+    showPasswordModal = () => {
+        this.setState({isPasswordModalVisible: true});
+      };
+    
+    handleDataOk = () => {
+        const personalDataRequest = {
+            firstName : this.state.user.firstName,
+            lastName :  this.state.user.lastName,
+            email : this.state.user.email
+        }
+
+        changePersonalData(personalDataRequest, localStorage.getItem('id'))
+            .then(data => {
+                ErrorHandler.runSuccess(data.message);
+            }).then(() => {
+                this.componentDidMount();
+            })
+
+        this.setState({isDataModalVisible: false});
+    };
+
+    handlePasswordOk = (event) => {
+        const data = new FormData(event.currentTarget.parentElement.parentElement.parentElement.querySelector('.newPassword'));
+        const newPasswordRequest = {
+            login: localStorage.getItem(USER_LOGIN),
+            oldPassword: data.get('oldPassword'),
+            newPassword: data.get('newPassword'),
+            confirmedPassword: data.get('confirmedPassword')
+        }
+
+        changePassword(newPasswordRequest, localStorage.getItem(USER_ID))
+            .then(() => {
+                ErrorHandler.runSuccess(data.message)
+            })
+
+        this.setState({isPasswordModalVisible: false});
+    };
+    
+    handleDataCancel = () => {
+        this.setState({isDataModalVisible: false});
+    };
+
+    handlePasswordCancel = () => {
+        this.setState({isPasswordModalVisible: false});
+    };
 
     render() {
 
@@ -156,57 +176,58 @@ class PersonalPage extends Component {
 			return <p>Loading...</p>;
 		}
 
-        if(this.state.login == null || this.state.roles == null || this.state.id == null){
-            return <div><h1>Unauthorized</h1></div>
-        }
-
-
         return <div>
                     <AppNavbar/>
                         <Card>
-                            <Col xs={2} sm={4} md={6} lg={8} xl={7}>
-                                <ImageLoader
+                        <Layout >
+                            <Content style={{display: 'flex', marginBottom:20}} >
+                                <ImageLoader style={{marginLeft:150}}
                                     imageUrl={this.state.user.avatar}
                                     handleImageUrlChange={this.handleImageUrlChange}
-                                />
-                            </Col>
-                            <Col xs={1}></Col>
-
-                        <Col xs={20} sm={16} md={16} lg={8} xl={14}>
-                            <Card style={{boxShadow:'0px 8px 16px 8px rgba(0,0,0,0.2)'}} bordered={true}>
-                                    <Divider style={{fontSize:30}} orientation="left">Personal data</Divider>
-                                    <Form onSubmit={this.handleSubmit}>
-                                        <FormGroup>
-                                            <Label style={{marginBottom:10}} for="email">Email</Label>
-                                            <Input style={{marginBottom:20}} type="text" name="email" id="email" value={user.email || ''}
-                                                onInput={this.handleChange} autoComplete="email" />
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label style={{marginBottom:10}} for="firstName">First Name</Label>
-                                            <Input style={{marginBottom:20}} type="text" name="firstName" id="firstName" value={user.firstName || ''}
-                                                onInput={this.handleChange} autoComplete="firstName" />
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label style={{marginBottom:10}} for="lastName">Last Name</Label>
-                                            <Input style={{marginBottom:20}} type="text" name="lastName" id="lastName" value={user.lastName || ''}
-                                                onInput={this.handleChange} autoComplete="lastName" />
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Button style={{marginRight:20, width:100}} color="primary" type="submit">Save</Button>{' '}                                           
-                                        </FormGroup>
-                                    </Form>
-                                    <Button style={{marginTop:30, width:230, height:40}} size="sm" color="primary" onClick={this.toogleRole}>Change password</Button>
-                                    <Form onSubmit={this.changePassword} className='newPassword' style={{display: 'none', marginTop:30}}>
-                                                <Label style={{marginTop:10, marginLeft:20}} for="lastName">Old password</Label>
-                                                <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="oldPassword"></Input>
-                                                <Label style={{marginTop:10, marginLeft:20}} for="lastName">New password</Label>
-                                                <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="newPassword"></Input>
-                                                <Label style={{marginTop:10, marginLeft:20}} for="lastName">Confirm password</Label>
-                                                <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="confirmedPassword"></Input>
-                                                <Button style={{marginTop: 20, marginBottom: 20, marginLeft:20}} type="submit">Confirm</Button>
-                                            </Form>
+                                />     
+                                <Card className="aside-card" style={{marginTop:10,  boxShadow:'0px 8px 16px 0px rgba(0,0,0,0.2)'}}>     
+                                    <Divider style={{fontSize:30}} orientation="left">Personal data</Divider>                          
+                                    <Meta  style={{marginTop: 20, marginLeft:20}}
+                                        avatar={<Avatar src={USER_ICON} />}
+                                        title={user.firstName + ' ' + user.lastName}
+                                        description={user.email}
+                                    />
+                                    <Card bodyStyle={{display: 'none'}} style={{marginTop: 145}} actions={[
+                                        <EditOutlined key="edit" onClick={this.showDataModal}/>,
+                                        <LockOutlined key="setting" onClick={this.showPasswordModal}/>
+                                        ]} />
                                 </Card>
-                        </Col>
+                                    <Modal title="Change personal data" visible={this.state.isDataModalVisible} onOk={this.handleDataOk} onCancel={this.handleDataCancel}>
+                                        <Form>
+                                            <FormGroup>
+                                                <Label style={{marginBottom:10}} for="email">Email</Label>
+                                                <Input style={{marginBottom:20}} type="text" name="email" id="email" value={user.email || ''}
+                                                    onInput={this.handleChange} autoComplete="email" />
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Label style={{marginBottom:10}} for="firstName">First Name</Label>
+                                                <Input style={{marginBottom:20}} type="text" name="firstName" id="firstName" value={user.firstName || ''}
+                                                    onInput={this.handleChange} autoComplete="firstName" />
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Label style={{marginBottom:10}} for="lastName">Last Name</Label>
+                                                <Input style={{marginBottom:20}} type="text" name="lastName" id="lastName" value={user.lastName || ''}
+                                                    onInput={this.handleChange} autoComplete="lastName" />
+                                            </FormGroup>
+                                        </Form>
+                                    </Modal>
+                                    <Modal title="Change credentials" visible={this.state.isPasswordModalVisible} onOk={this.handlePasswordOk} onCancel={this.handlePasswordCancel}>
+                                        <Form className='newPassword'>
+                                            <Label style={{marginTop:10, marginLeft:20}} for="lastName">Old password</Label>
+                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="oldPassword"></Input>
+                                            <Label style={{marginTop:10, marginLeft:20}} for="lastName">New password</Label>
+                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="newPassword"></Input>
+                                            <Label style={{marginTop:10, marginLeft:20}} for="lastName">Confirm password</Label>
+                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="confirmedPassword"></Input>
+                                        </Form>
+                                    </Modal>
+                                </Content>
+                            </Layout>
                         </Card>
                 <ErrorNotifier />
                 </div>

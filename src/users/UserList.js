@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
-import AppNavbar from '../AppNavBar.js';
+import AppNavbar from '../app/AppNavBar.js';
 import ErrorHandler from '../handler/ErrorHandler.js';
 import ErrorNotifier from '../handler/ErrorNotifiers.js';
-import $ from "jquery";
-import {  Card,Checkbox, List, Divider, Col } from 'antd';
+import {  Card,Checkbox, List, Divider, Col, Layout, Input,  Menu, Dropdown } from 'antd';
 import { Image } from 'react-bootstrap';
+import { API_BASE_URL, USER_TOKEN_TYPE, ACCESS_TOKEN, USER_BASE_AVATAR, ROLE_ADMIN, ROLE_USER } from '../constants/constants'
+import { loadUsers, userBan, userConfirm, changeRoles, searchBy } from '../services/user/UserService';
+import { DownOutlined } from '@ant-design/icons';
+const { Header, Footer, Sider, Content } = Layout;
 
 class UserList extends Component {
 
@@ -15,61 +18,63 @@ class UserList extends Component {
 		this.userBan = this.userBan.bind(this);
 		this.userConfirm = this.userConfirm.bind(this);
 		this.toogleRole = this.toogleRole.bind(this);
-		this.clickRole = this.clickRole.bind(this);
+		this.roleChange = this.roleChange.bind(this);
 		this.showSortMenu = this.showSortMenu.bind(this);
 		this.showSearchMenu = this.showSearchMenu.bind(this);
-		this.sortBy = this.sortBy.bind(this);
 	}
 
 	async componentDidMount() {
-		const response = await fetch("http://localhost:8080/api/v1/admin/users", {
-			method: 'GET',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				'Authorization': localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-			}
-		});
-		const body = await response.json();
-		this.setState({ users: body.usersDTO, isLoading: false });
+		loadUsers()
+			.then(data => {
+				this.setState({ users: data.usersDTO, isLoading: false });
+			})
 	}
 
 	userBan(id, ban) {
-		$.ajax({
-			url: 'http://localhost:8080/api/v1/admin/users/' + ban + '/' + id,
-			contentType: "application/json; charset=UTF-8",
-			method: "patch",
-            headers:{
-				'Authorization': localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-			},
-			success: function(data){
+
+		const banRequest = {
+			userId: id,
+			userBan: ban
+		}
+
+		userBan(banRequest)
+			.then(data => {
 				ErrorHandler.runSuccess(data.message);
-			},
-			error: function(data){
-				ErrorHandler.runError(data.responseJSON.message);
-			}
-		}).then(() => {
-			this.componentDidMount();
-		});
+			}).then(() => {
+				this.componentDidMount();
+			})
 	}
 
 	userConfirm(id) {
-		$.ajax({
-			url: 'http://localhost:8080/api/v1/admin/users/confirm/' + id,
-			contentType: "application/json; charset=UTF-8",
-			method: "patch",
-            headers:{
-				'Authorization': localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-			},
-			success: function(data){
+
+		const confirmRequest = {
+			userId: id,
+		}
+
+		userConfirm(confirmRequest)
+			.then(data => {
 				ErrorHandler.runSuccess(data.message);
-			},
-			error: function(data){
-				ErrorHandler.runError(data.responseJSON.message);
-			}
-		}).then(() => {
-			this.componentDidMount();
-		});
+			}).then(() => {
+				this.componentDidMount();
+			})
+	}
+
+	roleChange(e) {
+		e.preventDefault();
+		let data = new FormData(e.currentTarget);
+
+		const rolesRequest = {
+			roles: data.getAll('ROLE')
+		}
+
+		changeRoles(rolesRequest, data.get('USER_ID'))
+			.then(data => {
+				ErrorHandler.runSuccess(data.message);
+			}).then(() => {
+				this.componentDidMount();
+			})
+
+		e.currentTarget.style.display='none';
 	}
 	
 	toogleRole(e) {
@@ -81,34 +86,6 @@ class UserList extends Component {
 		}
 	}
 
-	clickRole(e) {
-		e.preventDefault();
-		let data = new FormData(e.currentTarget);
-		let id = data.get('USER_ID')
-		let role = data.getAll('ROLE');
-		let sendRoles = {
-			roles: role
-		}
-		$.ajax({
-			url: 'http://localhost:8080/api/v1/admin/users/role/' + id,
-			contentType: "application/json; charset=UTF-8",
-			method: "patch",
-			data: JSON.stringify(sendRoles),
-            headers:{
-				'Authorization': localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-			},
-			success: function(data){
-				ErrorHandler.runSuccess(data.message);
-			},
-			error: function(data){
-				ErrorHandler.runError(data.responseJSON.message);
-			}
-		}).then(() => {
-			this.componentDidMount();
-		});
-		e.currentTarget.style.display='none';
-	}
-
 	showSortMenu() {
 		document.getElementById("sortDropdown").classList.toggle("show");
 	}
@@ -117,23 +94,9 @@ class UserList extends Component {
 		document.getElementById("searchDropdown").classList.toggle("show");
 	}
 
-
-	async sortBy(name) {
+	async searchBy(name) {
 		let inputDesc = document.getElementById("descCheck");
 		let desc = inputDesc.checked ? 'true' : 'false';
-		const response = await fetch('http://localhost:8080/api/v1/admin/users?sortBy=' + name + '&desc=' + desc, {
-			method: 'GET',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				'Authorization': localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-			}
-		});
-		const body = await response.json();
-		this.setState({ users: body.usersDTO, isLoading: false });
-	}
-
-	async searchBy() {
 		let firstNameInput = document.getElementById("firstNameInput");
 		let lastNameInput = document.getElementById("lastNameInput");
 		let emailInput = document.getElementById("emailInput");
@@ -141,16 +104,11 @@ class UserList extends Component {
 		let firstName = firstNameInput.value;
 		let lastName = lastNameInput.value;
 		let email = emailInput.value;
-		const response = await fetch('http://localhost:8080/api/v1/admin/users/search?search=firstName:' + firstName + ',lastName:' + lastName + ',email:' + email, {
-			method: 'GET',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				'Authorization': localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
-			}
-		});
-		const body = await response.json();
-		this.setState({ users: body.usersDTO, isLoading: false });
+
+		searchBy(name, desc, firstName, lastName, email)
+			.then(data => {
+				this.setState({ users: data.usersDTO, isLoading: false });
+			})
 	}
 
 
@@ -160,14 +118,32 @@ class UserList extends Component {
 		if (isLoading) {
 			return <p>Loading...</p>;
 		}
+
+		const menu = (
+			<Menu>
+				<Menu.Item key="mail">
+					<a href="#" onClick={() => this.searchBy('firstName')}>First name</a>
+				</Menu.Item>
+				<Menu.Item key="mail">
+					<a href="#" onClick={() => this.searchBy('lastName')}>Last name</a>
+				</Menu.Item>
+				<Menu.Item key="mail">
+					<a href="#" onClick={() => this.searchBy('email')}>Email</a>
+				</Menu.Item>
+				<Menu.Item key="mail">
+					<span><input id="descCheck" style={{marginRight: 8}} name="descending" type="checkbox" value="descending"/>descending</span>
+				</Menu.Item>
+			</Menu>
+		  );
+
 		const userList = users.map(user => {
-			const inputAdmin = user.roles.includes("ADMIN") ? 'true' : 'false';
-			const inputUser = user.roles.includes("USER") ? 'true' : 'false';
+			const inputAdmin = user.roles.includes(ROLE_ADMIN) ? 'true' : 'false';
+			const inputUser = user.roles.includes(ROLE_USER) ? 'true' : 'false';
 			const roles = user.roles.map(role => role.role)
 			const ban = user.bannedDate == null ? "ban" : "unban"
 			user.showRoles = false;
 			var re = new RegExp("[0-9][0-9][0-9][0-9][\s-][0-9][0-9][\s-][0-9][0-9]");
-			const userAvatar = user.avatar==null ? "https://th.bing.com/th/id/R.d2c893f55930c7cb5bfe41538be295d7?rik=RCCbETsRGcm2iQ&pid=ImgRaw&r=0" : user.avatar
+			const userAvatar = user.avatar==null ? USER_BASE_AVATAR : user.avatar
 		return <div className="site-card-border-less-wrapper">
 			<Card style={{boxShadow:'0px 8px 16px 8px rgba(0,0,0,0.2)'}} bordered={true} >
 				<Col span={7}>
@@ -190,9 +166,9 @@ class UserList extends Component {
 						<Button size="sm" style={{marginRight: 8, width:100} } color="danger" onClick={() => this.userBan(user.id, ban)}>{ban}</Button>
 						<Button size="sm" style={{marginRight: 8, width:100}  } color="primary" onClick={() => this.userConfirm(user.id)}>Confirm</Button>
 						<Button size="sm" style={{marginRight: 8, width:100}  } color="primary" onClick={this.toogleRole}>Change roles</Button>						
-						<form onSubmit={this.clickRole} className='editRoles' style={{  display: 'none'}}>
-							<p><Checkbox defaultChecked={inputUser} style={{marginTop: 20, marginLeft:20}} name="ROLE" value="USER">USER</Checkbox></p>
-							<p><Checkbox defaultChecked={inputAdmin} style={{marginTop: 20, marginLeft:20}} name="ROLE" value="ADMIN">ADMIN</Checkbox></p>
+						<form onSubmit={this.roleChange} className='editRoles' style={{  display: 'none'}}>
+							<p><Checkbox  style={{marginTop: 20, marginLeft:20}} name="ROLE" value="USER">USER</Checkbox></p>
+							<p><Checkbox  style={{marginTop: 20, marginLeft:20}} name="ROLE" value="ADMIN">ADMIN</Checkbox></p>
 							<input type="hidden" name="USER_ID" value={user.id}/>
 							<Button style={{marginBottom: 20, marginLeft:20}} size="sm" color="danger">submit</Button>
 						</form>
@@ -204,31 +180,45 @@ class UserList extends Component {
 		return (
 			<div>
 				<AppNavbar />
-					 <Divider style={{fontSize:40}} orientation="left">Users</Divider>
-					 <div style={{ marginLeft:30}}>
-									<Button onClick={() => this.showSortMenu()} style={{ marginRight:20}} color="primary">Sort by</Button>
-										<div id="sortDropdown" className="dropdown-content">
-											<a href="#" onClick={() => this.sortBy('firstName')}>First name</a>
-											<a href="#" onClick={() => this.sortBy('lastName')}>Last name</a>
-											<a href="#" onClick={() => this.sortBy('email')}>Email</a>
-											<span><input id="descCheck" style={{marginRight: 8}} name="descending" type="checkbox" value="descending"/>descending</span>
-										</div>
-										<Button onClick={() => this.showSearchMenu()} color="primary">Search by</Button>
-										<div id="searchDropdown" className="dropdown-content">
-											<span>First name<input id="firstNameInput" style={{marginLeft: 10}} name="firstName" type="text"/></span>
-											<span>Last name<input id="lastNameInput" style={{marginLeft: 10}} name="lastName" type="text"/></span>
-											<span>Email<input id="emailInput" style={{marginLeft: 10}} name="email" type="text"/></span>
-											<Button onClick={() => this.searchBy()} className="searchbtn" color="danger">search</Button>
-										</div>
-								</div>
-						<List
-						dataSource={userList}
-						renderItem={user => (
-							<List.Item>
-								{user}
-							</List.Item>
-						)}
-						/>
+				<Layout>
+					<Content  style={{
+							padding: '0 50px',
+						}}>
+						<Divider style={{fontSize:40}} orientation="left">Users</Divider>
+						<Layout className="site-layout-background"
+							style={{
+							padding: '24px 0',
+							}}>
+						<Sider className="site-layout-background" style={{backgroundColor:'#ececec'}} width='300px'>
+							<div id="searchDropdown">
+								<span>First name<Input id="firstNameInput" style={{marginLeft: 10}} name="firstName" type="text"/></span>
+								<span>Last name<Input id="lastNameInput" style={{marginLeft: 10}} name="lastName" type="text"/></span>
+								<span>Email<Input id="emailInput" style={{marginLeft: 10}} name="email" type="text"/></span>
+								<Button onClick={() => this.searchBy('id')} className="searchbtn" color="danger">search</Button>
+							</div>
+							<Dropdown overlay={menu} placement="bottomLeft">
+								<a>Sort by</a>
+							</Dropdown>	
+						</Sider>
+						<Content>
+								<div id="sortDropdown" className="dropdown-content">
+								<a href="#" onClick={() => this.searchBy('firstName')}>First name</a>
+								<a href="#" onClick={() => this.searchBy('lastName')}>Last name</a>
+								<a href="#" onClick={() => this.searchBy('email')}>Email</a>
+								<span><input id="descCheck" style={{marginRight: 8}} name="descending" type="checkbox" value="descending"/>descending</span>
+							</div>
+							<List
+							dataSource={userList}
+							renderItem={user => (
+								<List.Item>
+									{user}
+								</List.Item>
+							)}
+							/>
+						</Content>
+						</Layout>
+						</Content>
+					</Layout>
 				<ErrorNotifier/>
 			</div>
 		);

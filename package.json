@@ -37,7 +37,6 @@
     "webstart": "webpack serve",
     "build": "webpack --mode production"
   },
-  "proxy": "http://localhost:8080",
   "eslintConfig": {
     "extends": [
       "react-app",
