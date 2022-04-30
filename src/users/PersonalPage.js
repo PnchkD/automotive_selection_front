@@ -181,7 +181,7 @@ class PersonalPage extends Component {
                         <Card>
                         <Layout >
                             <Content style={{display: 'flex', marginBottom:20}} >
-                                <ImageLoader style={{marginLeft:150}}
+                                <ImageLoader
                                     imageUrl={this.state.user.avatar}
                                     handleImageUrlChange={this.handleImageUrlChange}
                                 />     
@@ -219,11 +219,11 @@ class PersonalPage extends Component {
                                     <Modal title="Change credentials" visible={this.state.isPasswordModalVisible} onOk={this.handlePasswordOk} onCancel={this.handlePasswordCancel}>
                                         <Form className='newPassword'>
                                             <Label style={{marginTop:10, marginLeft:20}} for="lastName">Old password</Label>
-                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="oldPassword"></Input>
+                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" required name="oldPassword"></Input>
                                             <Label style={{marginTop:10, marginLeft:20}} for="lastName">New password</Label>
-                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="newPassword"></Input>
+                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" required name="newPassword"></Input>
                                             <Label style={{marginTop:10, marginLeft:20}} for="lastName">Confirm password</Label>
-                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" name="confirmedPassword"></Input>
+                                            <Input style={{marginTop:10, marginLeft:20, width: 420}}color="primary" type="password" required name="confirmedPassword"></Input>
                                         </Form>
                                     </Modal>
                                 </Content>

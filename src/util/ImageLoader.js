@@ -17,8 +17,8 @@ export default class ImageLoader extends Component {
         return (
             <>
                 <aside className="aside-picture">
-                    <Dragger
-                        style={{width:600, boxShadow:'0px 8px 16px 0px rgba(0,0,0,0.2)'}} 
+                    <Dragger className='aside-dragger'
+                        style={{ boxShadow:'0px 8px 16px 0px rgba(0,0,0,0.2)'}} 
                         name="file"
                         listType="picture"
                         showUploadList={false}

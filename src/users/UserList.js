@@ -3,11 +3,12 @@ import { Button } from 'reactstrap';
 import AppNavbar from '../app/AppNavBar.js';
 import ErrorHandler from '../handler/ErrorHandler.js';
 import ErrorNotifier from '../handler/ErrorNotifiers.js';
-import {  Card,Checkbox, List, Divider, Col, Layout, Input,  Menu, Dropdown } from 'antd';
+import {  Card,Checkbox, List, Divider, Col, Layout, Input,  Menu } from 'antd';
 import { Image } from 'react-bootstrap';
-import { API_BASE_URL, USER_TOKEN_TYPE, ACCESS_TOKEN, USER_BASE_AVATAR, ROLE_ADMIN, ROLE_USER } from '../constants/constants'
+import { USER_BASE_AVATAR, ROLE_ADMIN, ROLE_USER } from '../constants/constants'
 import { loadUsers, userBan, userConfirm, changeRoles, searchBy } from '../services/user/UserService';
-import { DownOutlined } from '@ant-design/icons';
+import { CheckOutlined, LockOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import SubMenu from 'antd/lib/menu/SubMenu';
 const { Header, Footer, Sider, Content } = Layout;
 
 class UserList extends Component {
@@ -95,7 +96,7 @@ class UserList extends Component {
 	}
 
 	async searchBy(name) {
-		let inputDesc = document.getElementById("descCheck");
+		let inputDesc = document.getElementsByName('descending');
 		let desc = inputDesc.checked ? 'true' : 'false';
 		let firstNameInput = document.getElementById("firstNameInput");
 		let lastNameInput = document.getElementById("lastNameInput");
@@ -119,23 +120,6 @@ class UserList extends Component {
 			return <p>Loading...</p>;
 		}
 
-		const menu = (
-			<Menu>
-				<Menu.Item key="mail">
-					<a href="#" onClick={() => this.searchBy('firstName')}>First name</a>
-				</Menu.Item>
-				<Menu.Item key="mail">
-					<a href="#" onClick={() => this.searchBy('lastName')}>Last name</a>
-				</Menu.Item>
-				<Menu.Item key="mail">
-					<a href="#" onClick={() => this.searchBy('email')}>Email</a>
-				</Menu.Item>
-				<Menu.Item key="mail">
-					<span><input id="descCheck" style={{marginRight: 8}} name="descending" type="checkbox" value="descending"/>descending</span>
-				</Menu.Item>
-			</Menu>
-		  );
-
 		const userList = users.map(user => {
 			const inputAdmin = user.roles.includes(ROLE_ADMIN) ? 'true' : 'false';
 			const inputUser = user.roles.includes(ROLE_USER) ? 'true' : 'false';
@@ -145,10 +129,13 @@ class UserList extends Component {
 			var re = new RegExp("[0-9][0-9][0-9][0-9][\s-][0-9][0-9][\s-][0-9][0-9]");
 			const userAvatar = user.avatar==null ? USER_BASE_AVATAR : user.avatar
 		return <div className="site-card-border-less-wrapper">
-			<Card style={{boxShadow:'0px 8px 16px 8px rgba(0,0,0,0.2)'}} bordered={true} >
+			<Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
+                                        <CheckOutlined key="edit" onClick={this.showDataModal}/>,
+                                        <LockOutlined key="setting" onClick={this.showPasswordModal}/>,
+										<UserSwitchOutlined onClick={this.toogleRole}/>
+                                        ]}>
 				<Col span={7}>
-					<Image
-					width={320}
+					<Image className='user-avatar'
 					src={userAvatar}
     			/>
 				</Col>
@@ -185,37 +172,53 @@ class UserList extends Component {
 							padding: '0 50px',
 						}}>
 						<Divider style={{fontSize:40}} orientation="left">Users</Divider>
-						<Layout className="site-layout-background"
+						<Layout
 							style={{
 							padding: '24px 0',
 							}}>
-						<Sider className="site-layout-background" style={{backgroundColor:'#ececec'}} width='300px'>
-							<div id="searchDropdown">
-								<span>First name<Input id="firstNameInput" style={{marginLeft: 10}} name="firstName" type="text"/></span>
-								<span>Last name<Input id="lastNameInput" style={{marginLeft: 10}} name="lastName" type="text"/></span>
-								<span>Email<Input id="emailInput" style={{marginLeft: 10}} name="email" type="text"/></span>
-								<Button onClick={() => this.searchBy('id')} className="searchbtn" color="danger">search</Button>
-							</div>
-							<Dropdown overlay={menu} placement="bottomLeft">
-								<a>Sort by</a>
-							</Dropdown>	
-						</Sider>
-						<Content>
-								<div id="sortDropdown" className="dropdown-content">
-								<a href="#" onClick={() => this.searchBy('firstName')}>First name</a>
-								<a href="#" onClick={() => this.searchBy('lastName')}>Last name</a>
-								<a href="#" onClick={() => this.searchBy('email')}>Email</a>
-								<span><input id="descCheck" style={{marginRight: 8}} name="descending" type="checkbox" value="descending"/>descending</span>
-							</div>
-							<List
-							dataSource={userList}
-							renderItem={user => (
-								<List.Item>
-									{user}
-								</List.Item>
-							)}
-							/>
-						</Content>
+							<Sider>
+								<Menu mode="inline">
+									<SubMenu key="1" title="Search by">
+										<Menu.Item key='2'>
+											<Input id="firstNameInput" placeholder="First name" name="firstName" type="text"/>
+										</Menu.Item>
+										<Menu.Item key='3'>
+											<Input id="lastNameInput" placeholder="Last name" name="lastName" type="text"/>
+										</Menu.Item>
+										<Menu.Item key='4'>
+											<Input id="emailInput" placeholder="Email" name="email" type="text"/>
+										</Menu.Item>
+										<Menu.Item key='5'>
+											<Button onClick={() => this.searchBy('id')} color="danger">search</Button>
+										</Menu.Item>
+									</SubMenu>
+									<SubMenu key="6" title="Sort by">
+										<Menu.Item key="7">
+											<a href="#" onClick={() => this.searchBy('firstName')}>First name</a>
+										</Menu.Item>
+										<Menu.Item key="8">
+											<a href="#" onClick={() => this.searchBy('lastName')}>Last name</a>
+										</Menu.Item>
+										<Menu.Item key="9">
+											<a href="#" onClick={() => this.searchBy('email')}>Email</a>
+										</Menu.Item>
+										<Menu.Item key="10">
+											<span><Checkbox style={{marginRight:8}} id="descCheck" name="descending" type="checkbox"/>Descending</span>
+										</Menu.Item>
+									</SubMenu>
+								</Menu>
+						</Sider> 
+			
+							<Content>
+								<List
+								dataSource={userList}
+								renderItem={user => (
+									<List.Item>
+										{user}
+									</List.Item>
+								)}
+								/>
+							</Content>
 						</Layout>
 						</Content>
 					</Layout>
