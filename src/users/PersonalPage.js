@@ -7,7 +7,7 @@ import ErrorNotifier from '../handler/ErrorNotifiers.js';
 import ImageLoader from "../util/ImageLoader";
 import { USER_ID, USER_LOGIN, USER_ROLES, USER_ICON } from '../constants/constants.js';
 import { changeAvatar, changePassword, changePersonalData, loadUser } from '../services/user/UserService.js';
-import { EditOutlined, LockOutlined } from '@ant-design/icons';
+import { EditOutlined, KeyOutlined } from '@ant-design/icons';
 const { Header, Footer, Sider, Content } = Layout;
 const { Meta } = Card;
 let thisObj; 
@@ -194,7 +194,7 @@ class PersonalPage extends Component {
                                     />
                                     <Card bodyStyle={{display: 'none'}} style={{marginTop: 145}} actions={[
                                         <EditOutlined key="edit" onClick={this.showDataModal}/>,
-                                        <LockOutlined key="setting" onClick={this.showPasswordModal}/>
+                                        <KeyOutlined key="setting" onClick={this.showPasswordModal}/>
                                         ]} />
                                 </Card>
                                     <Modal title="Change personal data" visible={this.state.isDataModalVisible} onOk={this.handleDataOk} onCancel={this.handleDataCancel}>

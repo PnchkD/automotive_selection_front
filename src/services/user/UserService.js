@@ -26,7 +26,6 @@ export function userConfirm(confirmRequest) {
 }
 
 export function changeRoles(rolesRequest, id) {
-    debugger
     const options = {
         url: API_BASE_URL + '/api/v1/admin/users/role/' + id,
         method: 'PATCH',

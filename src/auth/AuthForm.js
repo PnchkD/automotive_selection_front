@@ -49,7 +49,6 @@ class AuthForm extends React.Component {
 				localStorage.setItem(USER_EXPIRES_IN, data.expiresIn);
 
 				let decodedToken = jwt(data.accessToken);
-				console.log(decodedToken)
 				localStorage.setItem(USER_LOGIN, decodedToken.sub);
 				localStorage.setItem(USER_ROLES, decodedToken.roles);
 				localStorage.setItem(USER_ID, decodedToken.id);

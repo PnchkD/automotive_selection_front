@@ -229,13 +229,6 @@ tbody {
   width: 300px;
 }
 
-.editRoles {
-  margin-top:20px;
-  background-color: #f4f4f4;
-  border-radius:15px;
-  box-shadow:0px 8px 16px 8px rgba(0,0,0,0.2);
-}
-
 .aside-picture {
   height: 100%;
   width: 35%;
@@ -290,7 +283,6 @@ tbody {
 
 .ant-btn {
   height: auto!important;
-  margin-bottom: 500px!important;
 }
 
 .user-avatar {
@@ -329,7 +321,7 @@ tbody {
 }
 
 .ant-card-actions .anticon-lock::after {
-  content: "Ban";
+  content: "Ban/Unban";
 }
 
 .ant-card-actions .anticon-user-switch::after {

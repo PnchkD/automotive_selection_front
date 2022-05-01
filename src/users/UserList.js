@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import AppNavbar from '../app/AppNavBar.js';
 import ErrorHandler from '../handler/ErrorHandler.js';
 import ErrorNotifier from '../handler/ErrorNotifiers.js';
-import {  Card,Checkbox, List, Divider, Col, Layout, Input,  Menu } from 'antd';
+import {  Card,Checkbox, List, Divider, Col, Layout, Input,  Menu, Modal, Form } from 'antd';
 import { Image } from 'react-bootstrap';
 import { USER_BASE_AVATAR, ROLE_ADMIN, ROLE_USER } from '../constants/constants'
 import { loadUsers, userBan, userConfirm, changeRoles, searchBy } from '../services/user/UserService';
@@ -15,13 +15,14 @@ class UserList extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { users: [], isLoading: true };
+		this.state = { users: [], isLoading: true, rolesModalVisible: new Map() };
 		this.userBan = this.userBan.bind(this);
 		this.userConfirm = this.userConfirm.bind(this);
-		this.toogleRole = this.toogleRole.bind(this);
 		this.roleChange = this.roleChange.bind(this);
 		this.showSortMenu = this.showSortMenu.bind(this);
 		this.showSearchMenu = this.showSearchMenu.bind(this);
+		this.showRolesModal = this.showRolesModal.bind(this);
+		this.handleRolesCancel = this.handleRolesCancel.bind(this);
 	}
 
 	async componentDidMount() {
@@ -32,7 +33,6 @@ class UserList extends Component {
 	}
 
 	userBan(id, ban) {
-
 		const banRequest = {
 			userId: id,
 			userBan: ban
@@ -60,32 +60,28 @@ class UserList extends Component {
 			})
 	}
 
-	roleChange(e) {
-		e.preventDefault();
-		let data = new FormData(e.currentTarget);
+	roleChange(userId) {
+		let rolesSelector = '.editRoles' + userId;
+		let data = new FormData(document.querySelector(rolesSelector));
 
 		const rolesRequest = {
 			roles: data.getAll('ROLE')
 		}
-
-		changeRoles(rolesRequest, data.get('USER_ID'))
+		changeRoles(rolesRequest, userId)
 			.then(data => {
 				ErrorHandler.runSuccess(data.message);
 			}).then(() => {
 				this.componentDidMount();
 			})
 
-		e.currentTarget.style.display='none';
+		this.setState({rolesModalVisible:this.state.rolesModalVisible.set(userId,false)});
 	}
 	
-	toogleRole(e) {
-		let block = e.currentTarget.parentElement.parentElement.querySelector('.editRoles');
-		if(block.style.display == 'none') {
-			block.style.display = 'block';
-		} else {
-			block.style.display = 'none';
-		}
-	}
+    showRolesModal = (id) => {
+		const rolesModal = this.state.rolesModalVisible;
+		rolesModal.set(id,true)
+		this.setState({rolesModalVisible:this.state.rolesModalVisible.set(id,true)});
+	 };
 
 	showSortMenu() {
 		document.getElementById("sortDropdown").classList.toggle("show");
@@ -102,20 +98,23 @@ class UserList extends Component {
 		let lastNameInput = document.getElementById("lastNameInput");
 		let emailInput = document.getElementById("emailInput");
 
-		let firstName = firstNameInput.value;
-		let lastName = lastNameInput.value;
-		let email = emailInput.value;
+		let firstName = firstNameInput != null ? firstNameInput.value : '';
+		let lastName = lastNameInput != null ? lastNameInput.value : '';
+		let email =  emailInput != null ? emailInput.value : '';
 
 		searchBy(name, desc, firstName, lastName, email)
 			.then(data => {
 				this.setState({ users: data.usersDTO, isLoading: false });
 			})
 	}
-
+    
+    handleRolesCancel = (id) => {
+		this.setState({rolesModalVisible:this.state.rolesModalVisible.set(id,false)});
+    };
 
 
 	render() {
-		const { users, isLoading } = this.state;
+		const { users, isLoading, rolesModalVisible } = this.state;
 		if (isLoading) {
 			return <p>Loading...</p>;
 		}
@@ -127,12 +126,17 @@ class UserList extends Component {
 			const ban = user.bannedDate == null ? "ban" : "unban"
 			user.showRoles = false;
 			var re = new RegExp("[0-9][0-9][0-9][0-9][\s-][0-9][0-9][\s-][0-9][0-9]");
-			const userAvatar = user.avatar==null ? USER_BASE_AVATAR : user.avatar
+			const userAvatar = user.avatar==null ? USER_BASE_AVATAR : user.avatar;
+			
+			if(this.state.rolesModalVisible.get(user.id) == null) {
+				this.state.rolesModalVisible.set(user.id, false);
+			}
+
 		return <div className="site-card-border-less-wrapper">
 			<Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
-                                        <CheckOutlined key="edit" onClick={this.showDataModal}/>,
-                                        <LockOutlined key="setting" onClick={this.showPasswordModal}/>,
-										<UserSwitchOutlined onClick={this.toogleRole}/>
+                                        <CheckOutlined key="edit" onClick={() => this.userConfirm(user.id)}/>,
+                                        <LockOutlined key="setting" onClick={() => this.userBan(user.id, ban)}/>,
+										<UserSwitchOutlined onClick={() => this.showRolesModal(user.id)}/>
                                         ]}>
 				<Col span={7}>
 					<Image className='user-avatar'
@@ -149,17 +153,13 @@ class UserList extends Component {
 					<p><b>Banned date</b>: {re.exec(user.bannedDate)}</p>
 					<p><b>Date of confirmed mail</b>: {re.exec(user.isMailConfirmed)}</p>
 					</Col>
-					<Col span={6} style={{float:'right'}}>
-						<Button size="sm" style={{marginRight: 8, width:100} } color="danger" onClick={() => this.userBan(user.id, ban)}>{ban}</Button>
-						<Button size="sm" style={{marginRight: 8, width:100}  } color="primary" onClick={() => this.userConfirm(user.id)}>Confirm</Button>
-						<Button size="sm" style={{marginRight: 8, width:100}  } color="primary" onClick={this.toogleRole}>Change roles</Button>						
-						<form onSubmit={this.roleChange} className='editRoles' style={{  display: 'none'}}>
-							<p><Checkbox  style={{marginTop: 20, marginLeft:20}} name="ROLE" value="USER">USER</Checkbox></p>
-							<p><Checkbox  style={{marginTop: 20, marginLeft:20}} name="ROLE" value="ADMIN">ADMIN</Checkbox></p>
+					<Modal title="Change roles" visible={this.state.rolesModalVisible.get(user.id)} onOk={() => this.roleChange(user.id)} onCancel={() => this.handleRolesCancel(user.id)}>
+                        <Form className={'editRoles' + user.id}>
+							<span><Checkbox  style={{ marginLeft:20, marginRight:8}} name="ROLE" value="USER"/>USER
+							<Checkbox  style={{ marginLeft:80, marginRight:8}} name="ROLE" value="ADMIN"/>ADMIN</span>
 							<input type="hidden" name="USER_ID" value={user.id}/>
-							<Button style={{marginBottom: 20, marginLeft:20}} size="sm" color="danger">submit</Button>
-						</form>
-					</Col>
+                        </Form>
+                    </Modal>
 			</Card>
 		</div>
 		});
