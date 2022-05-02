@@ -1,16 +1,15 @@
 import React from "react";
-import $ from 'jquery';
-import AppNavbar from '../app/AppNavBar.js';
-import ErrorHandler from '../handler/ErrorHandler.js';
+import AppNavbar from '../../app/AppNavBar.js';
+import ErrorHandler from '../../handler/ErrorHandler.js';
 import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 import { Form, Icon, Input } from "antd";
 import {Button} from 'react-bootstrap';
-import loginImg from '../assets/login.png'
+import loginImg from '../../assets/login.png'
 import jwt from 'jwt-decode'
 import { Link } from "react-router-dom";
-import { ACCESS_TOKEN, USER_ID, API_BASE_URL, USER_TOKEN_TYPE, USER_LOGIN, USER_EXPIRES_IN, USER_ROLES } from '../constants/constants.js';
-import {login} from "../services/auth/AuthService";
+import { ACCESS_TOKEN, USER_ID, USER_TOKEN_TYPE, USER_LOGIN, USER_EXPIRES_IN, USER_ROLES } from '../../constants/constants.js';
+import {login} from "../../services/auth/AuthService";
 const FormItem = Form.Item;
 
 class AuthForm extends React.Component {
@@ -68,45 +67,45 @@ class AuthForm extends React.Component {
 			<div>
 				<AppNavbar/>
 				<div className="lContainer">
-			<div className="lItem">
-				<div className="loginImage">
-				  <img src={loginImg} width="300" style={{position: 'relative'}} alt="login"/>
+					<div className="lItem">
+						<div className="loginImage">
+						<img src={loginImg} width="300" style={{position: 'relative'}} alt="login"/>
+						</div>
+						<div className="loginForm">
+						<h2 style={{textAlign:'center', marginLeft:-25}}>Login</h2>
+							<Form onSubmit={this.handleSubmit} className="login-form">
+							<FormItem>
+								<Input
+								prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+								placeholder="Username"
+								onChange={this.handleChange}
+								name="login" value={this.state.login}
+								required
+								/>
+							</FormItem>
+							<FormItem>
+								<Input
+								prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
+								type="password"
+								name="password" value={this.state.password}
+								placeholder="Password"
+								onChange={this.handleChange}
+								required
+								/>
+							</FormItem>
+							<FormItem>
+							<Button size="sm"
+								type="primary"
+								htmlType="submit"
+								className="login-form-button"
+								>Log in</Button>
+								<Link style={{ float:'right' }} to="/passwordRecovery" role={'link'}>Забыли пароль?</Link>
+							</FormItem>
+							
+						</Form>
+						</div>
+					</div>
 				</div>
-				<div className="loginForm">
-				  <h2>Login</h2>
-					<Form onSubmit={this.handleSubmit} className="login-form">
-					<FormItem>
-						<Input
-						  prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
-						  placeholder="Username"
-						  onChange={this.handleChange}
-						  name="login" value={this.state.login}
-						  required
-						/>
-					</FormItem>
-					<FormItem>
-						<Input
-						  prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)", margin:-15 }} />}
-						  type="password"
-						  name="password" value={this.state.password}
-						  placeholder="Password"
-						  onChange={this.handleChange}
-						  required
-						/>
-					</FormItem>
-					<FormItem>
-					  <Button size="sm"
-						type="primary"
-						htmlType="submit"
-						className="login-form-button"
-					  	>Log in</Button>
-						<Link style={{ float:'right' }} to="/passwordRecovery" role={'link'}>Забыли пароль?</Link>
-					</FormItem>
-					
-				  </Form>
-				</div>
-			</div>
-			</div>
 			</div>
 		  );
 		}

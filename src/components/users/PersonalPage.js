@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import {Input,  Label, FormGroup} from 'reactstrap';
-import AppNavbar from '../app/AppNavBar.js';
+import AppNavbar from '../../app/AppNavBar.js';
 import { Card, Form, Avatar, Modal, Divider, Layout } from 'antd';
-import ErrorHandler from '../handler/ErrorHandler';
-import ErrorNotifier from '../handler/ErrorNotifiers.js';
-import ImageLoader from "../util/ImageLoader";
-import { USER_ID, USER_LOGIN, USER_ROLES, USER_ICON } from '../constants/constants.js';
-import { changeAvatar, changePassword, changePersonalData, loadUser } from '../services/user/UserService.js';
+import ErrorHandler from '../../handler/ErrorHandler';
+import ErrorNotifier from '../../handler/ErrorNotifiers.js';
+import ImageLoader from "../../util/ImageLoader";
+import { USER_ID, USER_LOGIN, USER_ROLES, USER_ICON } from '../../constants/constants.js';
+import { changeAvatar, changePassword, changePersonalData, loadUser } from '../../services/user/UserService.js';
 import { EditOutlined, KeyOutlined } from '@ant-design/icons';
-const { Header, Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 const { Meta } = Card;
 let thisObj; 
 
@@ -31,9 +31,6 @@ class PersonalPage extends Component {
             }
 
             this.handleChange = this.handleChange.bind(this);
-            this.handleSubmit = this.handleSubmit.bind(this);
-            this.changePassword = this.changePassword.bind(this)
-            this.toogleRole = this.toogleRole.bind(this);
             this.showDataModal = this.showDataModal.bind(this);
             this.handleDataOk = this.handleDataOk.bind(this);
             this.handleDataCancel = this.handleDataCancel.bind(this);
@@ -51,34 +48,6 @@ class PersonalPage extends Component {
             })
     }
 
-    changePassword(event) {
-        event.preventDefault();
-
-		const data = new FormData(event.currentTarget);
-        const newPasswordRequest = {
-            login: localStorage.getItem(USER_LOGIN),
-            oldPassword: data.get('oldPassword'),
-            newPassword: data.get('newPassword'),
-            confirmedPassword: data.get('confirmedPassword')
-        }
-
-        changePassword(newPasswordRequest, localStorage.getItem(USER_ID))
-            .then(() => {
-                ErrorHandler.runSuccess(data)
-            })
-	}
-
-    toogleRole(e) {
-        debugger
-        let block = e.currentTarget.parentElement.parentElement.parentElement.parentElement.querySelector('.newPassword');
-        if(block.style.display == 'none') {
-            block.style.display = 'block';
-            block.style.position = 'relative';
-        } else {
-            block.style.display = 'none';
-        }
-    }
-
     handleChange(event) {
         const target = event.target;
         const name = target.name;
@@ -87,23 +56,6 @@ class PersonalPage extends Component {
 
         user[name] = value;
         this.setState({ user: user });
-    }
-
-    async handleSubmit(event) {
-        event.preventDefault();
-
-        const personalDataRequest = {
-            firstName : this.state.user.firstName,
-            lastName :  this.state.user.lastName,
-            email : this.state.user.email
-        }
-
-        changePersonalData(personalDataRequest, localStorage.getItem('id'))
-            .then(data => {
-                ErrorHandler.runSuccess(data.message);
-            }).then(() => {
-                this.componentDidMount();
-            })
     }
 
     handleImageUrlChange = (imageUrl) => {

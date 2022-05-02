@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import '../app/App.css';
-import AppNavbar from '../app/AppNavBar';
+import '../../app/App.css';
+import AppNavbar from '../../app/AppNavBar';
 import { Link } from 'react-router-dom';
 import { Container } from 'reactstrap';
-import { USER_ROLES, ROLE_ADMIN, ROLE_USER } from '../constants/constants';
+import { USER_ROLES, ROLE_ADMIN, ROLE_USER } from '../../constants/constants';
 
 class Home extends Component {
   

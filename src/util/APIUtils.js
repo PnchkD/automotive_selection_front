@@ -17,7 +17,7 @@ export function request(options) {
     return fetch(options.url, options)
         .then(response => {
             if (!response.ok) {
-                ErrorHandler.runError(response.responseJSON.message);
+                ErrorHandler.runError(response.json().message);
             } else {
                 return response.json()
             }

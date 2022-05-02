@@ -1,15 +1,12 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
-import AppNavbar from '../app/AppNavBar.js'
-import $ from 'jquery';
-import ErrorHandler from '../handler/ErrorHandler.js';
-import ErrorNotifier from '../handler/ErrorNotifiers';
+import AppNavbar from '../../app/AppNavBar.js'
+import ErrorNotifier from '../../handler/ErrorNotifiers';
 import { Form, Input, Divider } from 'antd';
 import {Button} from 'react-bootstrap';
 import { MailOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from '../constants/constants.js';
-import { confirmRecoveryCode } from '../services/auth/AuthService.js';
+import { confirmRecoveryCode } from '../../services/auth/AuthService.js';
 const FormItem = Form.Item;
 
 var history
@@ -46,7 +43,7 @@ class NewPasswordForm extends React.Component {
             <div className="lContainer">
               <div className="ReqItem">
                   <div className="pasReqForm">
-                    <MailOutlined />
+                    <MailOutlined style={{backgroundColor: 'rgb(255, 180, 210)', borderRadius:15}}/>
                     <Divider style={{fontSize:20}}>Check your email</Divider>
                     <Form onSubmit={this.onSigninSubmit} >
                     <FormItem>

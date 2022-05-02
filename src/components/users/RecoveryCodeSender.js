@@ -1,15 +1,12 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
-import AppNavbar from '../app/AppNavBar.js'
-import $ from 'jquery';
-import ErrorHandler from '../handler/ErrorHandler.js';
-import ErrorNotifier from '../handler/ErrorNotifiers';
+import AppNavbar from '../../app/AppNavBar.js'
+import ErrorNotifier from '../../handler/ErrorNotifiers';
 import { Form, Input, Divider } from 'antd';
 import {Button} from 'react-bootstrap';
 import { LockOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from '../constants/constants.js';
-import { sendRecoveryCode } from '../services/auth/AuthService.js';
+import { sendRecoveryCode } from '../../services/auth/AuthService.js';
 const FormItem = Form.Item;
 
 
@@ -50,7 +47,7 @@ class PasswordRecoveryHandler extends React.Component {
             <div className="lContainer">
               <div className="ReqItem">
                   <div className="pasReqForm">
-                    <LockOutlined />
+                    <LockOutlined style={{backgroundColor: 'rgb(255, 180, 210)', borderRadius:15}}/>
                     <Divider style={{fontSize:20}}>Password recovery</Divider>
                     <Form onSubmit={this.onSigninSubmit} >
                     <FormItem>

@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
-import AppNavbar from '../app/AppNavBar.js';
-import ErrorHandler from '../handler/ErrorHandler.js';
-import ErrorNotifier from '../handler/ErrorNotifiers.js';
-import {  Card,Checkbox, List, Divider, Col, Layout, Input,  Menu, Modal, Form } from 'antd';
-import { Image } from 'react-bootstrap';
-import { USER_BASE_AVATAR, ROLE_ADMIN, ROLE_USER } from '../constants/constants'
-import { loadUsers, userBan, userConfirm, changeRoles, searchBy } from '../services/user/UserService';
-import { CheckOutlined, LockOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import AppNavbar from '../../app/AppNavBar.js';
+import ErrorHandler from '../../handler/ErrorHandler.js';
+import ErrorNotifier from '../../handler/ErrorNotifiers.js';
+import { Checkbox, List, Divider, Layout, Input, Menu } from 'antd';
+import { loadUsers, userBan, userConfirm, changeRoles, searchBy } from '../../services/user/UserService';
 import SubMenu from 'antd/lib/menu/SubMenu';
-const { Header, Footer, Sider, Content } = Layout;
+import UserCard from './UserCard.js';
+const { Sider, Content } = Layout;
 
 class UserList extends Component {
 
@@ -23,9 +21,10 @@ class UserList extends Component {
 		this.showSearchMenu = this.showSearchMenu.bind(this);
 		this.showRolesModal = this.showRolesModal.bind(this);
 		this.handleRolesCancel = this.handleRolesCancel.bind(this);
+		this.componentDidMount = this.componentDidMount.bind(this);
 	}
 
-	async componentDidMount() {
+	componentDidMount() {
 		loadUsers()
 			.then(data => {
 				this.setState({ users: data.usersDTO, isLoading: false });
@@ -114,54 +113,20 @@ class UserList extends Component {
 
 
 	render() {
-		const { users, isLoading, rolesModalVisible } = this.state;
+		const { users, isLoading } = this.state;
 		if (isLoading) {
 			return <p>Loading...</p>;
 		}
 
 		const userList = users.map(user => {
-			const inputAdmin = user.roles.includes(ROLE_ADMIN) ? 'true' : 'false';
-			const inputUser = user.roles.includes(ROLE_USER) ? 'true' : 'false';
-			const roles = user.roles.map(role => role.role)
-			const ban = user.bannedDate == null ? "ban" : "unban"
-			user.showRoles = false;
-			var re = new RegExp("[0-9][0-9][0-9][0-9][\s-][0-9][0-9][\s-][0-9][0-9]");
-			const userAvatar = user.avatar==null ? USER_BASE_AVATAR : user.avatar;
-			
-			if(this.state.rolesModalVisible.get(user.id) == null) {
-				this.state.rolesModalVisible.set(user.id, false);
-			}
-
-		return <div className="site-card-border-less-wrapper">
-			<Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
-                                        <CheckOutlined key="edit" onClick={() => this.userConfirm(user.id)}/>,
-                                        <LockOutlined key="setting" onClick={() => this.userBan(user.id, ban)}/>,
-										<UserSwitchOutlined onClick={() => this.showRolesModal(user.id)}/>
-                                        ]}>
-				<Col span={7}>
-					<Image className='user-avatar'
-					src={userAvatar}
-    			/>
-				</Col>
-				<Col span={7}>
-					<p><b>First name</b>: {user.firstName}</p>
-					<p><b>Last name</b>: {user.lastName}</p>
-					<p><b>Email</b>: {user.email}</p>
-					<p><b>Roles</b>: {roles.join(" ")}</p>
-					<p><b>Date of last login</b>: {re.exec(user.dateOfLastLogin)}</p>
-					<p><b>Date of approved</b>: {re.exec(user.dateOfApproved)}</p>
-					<p><b>Banned date</b>: {re.exec(user.bannedDate)}</p>
-					<p><b>Date of confirmed mail</b>: {re.exec(user.isMailConfirmed)}</p>
-					</Col>
-					<Modal title="Change roles" visible={this.state.rolesModalVisible.get(user.id)} onOk={() => this.roleChange(user.id)} onCancel={() => this.handleRolesCancel(user.id)}>
-                        <Form className={'editRoles' + user.id}>
-							<span><Checkbox  style={{ marginLeft:20, marginRight:8}} name="ROLE" value="USER"/>USER
-							<Checkbox  style={{ marginLeft:80, marginRight:8}} name="ROLE" value="ADMIN"/>ADMIN</span>
-							<input type="hidden" name="USER_ID" value={user.id}/>
-                        </Form>
-                    </Modal>
-			</Card>
-		</div>
+			return <UserCard 
+						user={user} 
+						rolesModalVisible={this.state.rolesModalVisible}
+						userConfirm={this.userConfirm} 
+						userBan={this.userBan}
+						showRolesModal={this.showRolesModal}
+						roleChange={this.roleChange}
+						handleRolesCancel={this.handleRolesCancel}/>
 		});
 
 		return (

@@ -1,15 +1,12 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
-import AppNavbar from '../app/AppNavBar.js'
-import $ from 'jquery';
-import ErrorHandler from '../handler/ErrorHandler.js';
-import ErrorNotifier from '../handler/ErrorNotifiers.js';
+import AppNavbar from '../../app/AppNavBar.js'
+import ErrorNotifier from '../../handler/ErrorNotifiers.js';
 import { Form, Icon, Input, Divider } from 'antd';
 import {Button} from 'react-bootstrap';
 import { LockOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from '../constants/constants.js';
-import { changePassword } from '../services/auth/AuthService.js';
+import { changePassword } from '../../services/auth/AuthService.js';
 const FormItem = Form.Item;
 
 var history
@@ -61,7 +58,7 @@ class EnterNewPasswordForm extends React.Component {
             <div className="lContainer">
               <div className="ReqItem">
                   <div className="pasReqForm">
-                    <LockOutlined />
+                    <LockOutlined style={{backgroundColor: 'rgb(255, 180, 210)', borderRadius:15}}/>
                     <Divider style={{fontSize:20}}>Enter new password</Divider>
                     <Form onSubmit={this.onSigninSubmit} >
                     <FormItem>
@@ -106,7 +103,7 @@ class EnterNewPasswordForm extends React.Component {
                         htmlType="submit"
                         className="login-form-button">
                       Confirm password
-                    </Button>
+                      </Button>
                       <Link style={{float:'left'}} to='/auth'>Sing in</Link>
                       <Link style={{float:'right'}} to='/auth/registration'>Registration</Link>
                     </FormItem>

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from '../home/Home.js';
-import AuthForm from '../auth/AuthForm.js';
-import RegistrationForm from '../auth/RegistrationForm.js';
-import UserList from '../users/UserList.js';
-import PersonalPage from '../users/PersonalPage.js';
-import RecoveryCodeSender from '../users/RecoveryCodeSender.js'
-import RecoveryCodeConfirmer from '../users/RecoveryCodeConfirmer.js'
-import NewPasswordForm from '../users/NewPasswordForm.js'
+import Home from '../components/home/Home.js';
+import AuthForm from '../components/auth/AuthForm.js';
+import RegistrationForm from '../components/auth/RegistrationForm.js';
+import UserList from '../components/users/UserList.js';
+import PersonalPage from '../components/users/PersonalPage.js';
+import RecoveryCodeSender from '../components/users/RecoveryCodeSender.js'
+import RecoveryCodeConfirmer from '../components/users/RecoveryCodeConfirmer.js'
+import NewPasswordForm from '../components/users/NewPasswordForm.js'
 
 
 class App extends Component {
