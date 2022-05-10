@@ -55,7 +55,8 @@ class UserCard extends Component {
                 <Modal title="Change roles" visible={this.state.rolesModalVisible.get(user.id)} onOk={() => this.props.roleChange(user.id)} onCancel={() => this.props.handleRolesCancel(user.id)}>
                     <Form className={'editRoles' + user.id}>
                         <span><Checkbox  style={{ marginLeft:20, marginRight:8}} name="ROLE" value="USER"/>USER
-                        <Checkbox  style={{ marginLeft:80, marginRight:8}} name="ROLE" value="ADMIN"/>ADMIN</span>
+                        <Checkbox  style={{ marginLeft:80, marginRight:8}} name="ROLE" value="ADMIN"/>ADMIN
+                        <Checkbox  style={{ marginLeft:80, marginRight:8}} name="ROLE" value="AUTOPICKER"/>AUTOPICKER</span>
                         <input type="hidden" name="USER_ID" value={user.id}/>
                     </Form>
                 </Modal>

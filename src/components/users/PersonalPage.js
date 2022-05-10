@@ -133,11 +133,13 @@ class PersonalPage extends Component {
                         <Card>
                         <Layout >
                             <Content style={{display: 'flex', marginBottom:20}} >
-                                <ImageLoader
-                                    imageUrl={this.state.user.avatar}
-                                    handleImageUrlChange={this.handleImageUrlChange}
-                                />     
-                                <Card className="aside-card" style={{marginTop:10,  boxShadow:'0px 8px 16px 0px rgba(0,0,0,0.2)'}}>     
+                                <Card style={{marginLeft:'2%', width:'35%', backgroundColor:"#f0f2f5"}} bordered={false}>
+                                    <ImageLoader
+                                        imageUrl={this.state.user.avatar}
+                                        handleImageUrlChange={this.handleImageUrlChange}
+                                    />     
+                                </Card>
+                                <Card className="aside-card" style={{marginLeft:'7%', marginTop:10,  boxShadow:'0px 8px 16px 0px rgba(0,0,0,0.2)'}}>     
                                     <Divider style={{fontSize:30}} orientation="left">Personal data</Divider>                          
                                     <Meta  style={{marginTop: 20, marginLeft:20}}
                                         avatar={<Avatar src={USER_ICON} />}

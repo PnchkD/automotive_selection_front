@@ -87,7 +87,7 @@
 /* Links inside the dropdown */
 .dropdown-content a, span {
   color: black;
-  padding: 12px 16px;
+  padding: 10px 10px;
   text-decoration: none;
   display: block;
 }
@@ -232,13 +232,13 @@ tbody {
 
 .aside-picture {
   height: 100%;
-  width: 35%;
+  width: 100%;
   margin-left: 7%;
 }
 
 .aside-dragger {
   height: 100%;
-  width: 35%;
+  width: 100%;
   margin-left: 7%;
 }
 
@@ -302,6 +302,15 @@ tbody {
   margin-right: 7%;
 }
 
+.car-description {
+  display: flex;
+  height: 25%;
+  width: 45%;
+  margin-left: 2%;
+  margin-top: 2%;
+  margin-right: 7%;
+}
+
 .ant-layout-sider {
   margin-top: 40px;
   margin-bottom: 40px;
@@ -346,4 +355,34 @@ tbody {
 
 .ant-card-actions .anticon-user-switch::after {
   content: "Change roles";
+}
+
+.ant-select-arrow {
+  top: 0%!important;
+  margin-top: 0px!important;
+}
+
+.ant-upload-list-picture .ant-upload-list-item-name, .ant-upload-list-picture-card .ant-upload-list-item-name {
+  line-height: 0px!important;
+}
+
+.ant-upload-list-item-card-actions.picture {
+  line-height: 0px!important;
+  top: 15px!important;
+}
+
+.ant-carousel .slick-dots-bottom * {
+  background-color: #1890ff!important;
+}
+
+.ant-carousel {
+  margin-left: 4%!important;
+}
+
+.ant-breadcrumb span{
+  display: inline-block!important;
+  color:#2980B9;
+  margin: 0px!important;
+  padding-right: 0px!important;
+  padding-left: 10px!important;
 }

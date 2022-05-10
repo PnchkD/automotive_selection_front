@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { USER_ID, USER_LOGIN, ACCESS_TOKEN, USER_TOKEN_TYPE, USER_EXPIRES_IN, USER_ROLES, ROLE_ADMIN, ROLE_USER } from '../constants/constants';
+import { USER_ID, USER_LOGIN, ACCESS_TOKEN, USER_TOKEN_TYPE, USER_EXPIRES_IN, USER_ROLES, ROLE_ADMIN, ROLE_USER, ROLE_AUTOPICKER } from '../constants/constants';
 
 class AppNavbar extends Component {
   constructor(props) {
@@ -32,7 +32,10 @@ class AppNavbar extends Component {
   render() {
     let navItems;
 
-    if(localStorage.getItem(USER_ROLES)!=null && localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) && localStorage.getItem(USER_ROLES).includes(ROLE_USER)){ 
+    if(localStorage.getItem(USER_ROLES)!=null && 
+                          localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) && 
+                          localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
+                          localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
                 <NavLink tag={Link} to="/users/me">Me</NavLink>
@@ -41,11 +44,23 @@ class AppNavbar extends Component {
                 <NavLink padding = "10px" tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
             <NavItem>
+                <NavLink padding = "10px" tag={Link} to="/autopicker/bids">Bids</NavLink>
+            </NavItem>
+            <NavItem>
+                <NavLink padding = "10px" tag={Link} to="/autopicker/departures">Departures</NavLink>
+            </NavItem>
+            <NavItem>
                     <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
                 </NavItem>
         </Nav>
-    } else if(localStorage.getItem(USER_ROLES)!=null && localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN)){ 
+    } else if(localStorage.getItem(USER_ROLES)!=null && 
+                      localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) &&
+                      localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
+                      !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
+            <NavItem>
+                <NavLink tag={Link} to="/users/me">Me</NavLink>
+            </NavItem>
             <NavItem>
                 <NavLink padding = "10px" tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
@@ -53,15 +68,72 @@ class AppNavbar extends Component {
                   <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
                 </NavItem>
         </Nav>
-    } else if(localStorage.getItem(USER_ROLES)!=null && localStorage.getItem(USER_ROLES).includes(ROLE_USER)){
+    }  else if(localStorage.getItem(USER_ROLES)!=null && 
+                      localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) &&
+                      !localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
+                      !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
+        navItems = <Nav className="ml-auto" navbar>
+            <NavItem>
+              <NavLink padding = "10px" tag={Link} to="/admin/users">Users</NavLink>
+            </NavItem>
+          <NavItem>
+              <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+          </NavItem>
+    </Nav>
+    } else if(localStorage.getItem(USER_ROLES)!=null && 
+                      !localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) &&
+                      localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
+                      !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
+          navItems = <Nav className="ml-auto" navbar>
+            <NavItem>
+                <NavLink tag={Link} to="/users/me">Me</NavLink>
+            </NavItem>
+            <NavItem>
+          <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+            </NavItem>
+          </Nav>
+    } else if(localStorage.getItem(USER_ROLES)!=null && 
+                      !localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) &&
+                      localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
+                      localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
+          navItems = <Nav className="ml-auto" navbar>
+          <NavItem>
+            <NavLink tag={Link} to="/users/me">Me</NavLink>
+          </NavItem>
+          <NavItem>
+              <NavLink padding = "10px" tag={Link} to="/autopicker/bids">Bids</NavLink>
+          </NavItem>
+          <NavItem>
+              <NavLink padding = "10px" tag={Link} to="/autopicker/departures">Departures</NavLink>
+          </NavItem>
+          <NavItem>
+              <NavLink padding = "10px" tag={Link} to="/autopicker/cars">cars</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+            </NavItem>
+          </Nav>
+    } else if(localStorage.getItem(USER_ROLES)!=null && 
+                      !localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) &&
+                      !localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
+                      localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
         <NavItem>
             <NavLink tag={Link} to="/users/me">Me</NavLink>
         </NavItem>
         <NavItem>
-              <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+          <NavLink padding = "10px" tag={Link} to="/autopicker/requests">Requests</NavLink>
         </NavItem>
-    </Nav>
+        <NavItem>
+          <NavLink padding = "10px" tag={Link} to="/autopicker/departures">Departures</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink padding = "10px" tag={Link} to="/autopicker/cars">Cars</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+        </NavItem>
+        </Nav>
     } else {
         navItems = <Nav className="ml-auto" navbar>
         <NavItem>

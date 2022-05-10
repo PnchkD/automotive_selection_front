@@ -9,6 +9,8 @@ import PersonalPage from '../components/users/PersonalPage.js';
 import RecoveryCodeSender from '../components/users/RecoveryCodeSender.js'
 import RecoveryCodeConfirmer from '../components/users/RecoveryCodeConfirmer.js'
 import NewPasswordForm from '../components/users/NewPasswordForm.js'
+import CarList from '../components/cars/CarList.js'
+import CarPage from '../components/cars/CarPage.js'
 
 
 class App extends Component {
@@ -29,7 +31,9 @@ class App extends Component {
           <Route path='/passwordRecovery' exact={true} component={RecoveryCodeSender}/>
           <Route path='/recoveryCode' exact={true} component={RecoveryCodeConfirmer}/>
           <Route path='/passwordChange' exact={true} component={NewPasswordForm}/>
-          
+          <Route path='/autopicker/cars' exact={true} component={CarList}/>
+          <Route path='/autopicker/cars/:id' exact={true} component={CarPage}/>
+
         </Switch>
      </Router>
       )
