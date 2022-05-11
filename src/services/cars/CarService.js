@@ -33,3 +33,20 @@ export function loadCar(id) {
     };
     return request(options);
 }
+
+export function drop(id) {
+    const options = {
+        url: API_BASE_URL + '/api/v1/autopicker/cars/' + id,
+        method: 'DELETE',
+    };
+    return request(options);
+}
+
+export function addDescription(newDescriptionRequest, id) {
+    const options = {
+        url: API_BASE_URL + '/api/v1/autopicker/cars/' + id,
+        method: 'PATCH',
+        body: JSON.stringify(newDescriptionRequest)
+    };
+    return request(options);
+}

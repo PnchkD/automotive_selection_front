@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { USER_ID, USER_LOGIN, ACCESS_TOKEN, USER_TOKEN_TYPE, USER_EXPIRES_IN, USER_ROLES, ROLE_ADMIN, ROLE_USER, ROLE_AUTOPICKER } from '../constants/constants';
+import { UserOutlined, HomeOutlined } from '@ant-design/icons';
 
 class AppNavbar extends Component {
   constructor(props) {
@@ -38,20 +39,20 @@ class AppNavbar extends Component {
                           localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
-                <NavLink tag={Link} to="/users/me">Me</NavLink>
+                <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
             </NavItem>
             <NavItem>
-                <NavLink padding = "10px" tag={Link} to="/admin/users">Users</NavLink>
+                <NavLink  style={{paddingTop:13}} tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink padding = "10px" tag={Link} to="/autopicker/bids">Bids</NavLink>
+                <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/requests">Requests</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink padding = "10px" tag={Link} to="/autopicker/departures">Departures</NavLink>
+                <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/departures">Departures</NavLink>
             </NavItem>
             <NavItem>
-                    <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
-                </NavItem>
+                <NavLink style={{paddingTop:13}} onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+            </NavItem>
         </Nav>
     } else if(localStorage.getItem(USER_ROLES)!=null && 
                       localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) &&
@@ -59,13 +60,13 @@ class AppNavbar extends Component {
                       !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
-                <NavLink tag={Link} to="/users/me">Me</NavLink>
+                <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
             </NavItem>
             <NavItem>
-                <NavLink padding = "10px" tag={Link} to="/admin/users">Users</NavLink>
+                <NavLink  style={{paddingTop:13}}  tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
             <NavItem>
-                  <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+                  <NavLink  style={{paddingTop:13}}  onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
                 </NavItem>
         </Nav>
     }  else if(localStorage.getItem(USER_ROLES)!=null && 
@@ -74,10 +75,10 @@ class AppNavbar extends Component {
                       !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink padding = "10px" tag={Link} to="/admin/users">Users</NavLink>
+              <NavLink  style={{paddingTop:13}}  tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
           <NavItem>
-              <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+              <NavLink  style={{paddingTop:13}}  onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
           </NavItem>
     </Nav>
     } else if(localStorage.getItem(USER_ROLES)!=null && 
@@ -86,31 +87,31 @@ class AppNavbar extends Component {
                       !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
           navItems = <Nav className="ml-auto" navbar>
             <NavItem>
-                <NavLink tag={Link} to="/users/me">Me</NavLink>
+                <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
             </NavItem>
             <NavItem>
-          <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+          <NavLink  style={{paddingTop:13}}  onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
             </NavItem>
           </Nav>
     } else if(localStorage.getItem(USER_ROLES)!=null && 
                       !localStorage.getItem(USER_ROLES).includes(ROLE_ADMIN) &&
                       localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
                       localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
-          navItems = <Nav className="ml-auto" navbar>
+          navItems = <Nav className='ml-auto' navbar>
           <NavItem>
-            <NavLink tag={Link} to="/users/me">Me</NavLink>
+            <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
           </NavItem>
           <NavItem>
-              <NavLink padding = "10px" tag={Link} to="/autopicker/bids">Bids</NavLink>
+              <NavLink style={{paddingTop:13}} tag={Link} to="/autopicker/requests">Requests</NavLink>
           </NavItem>
           <NavItem>
-              <NavLink padding = "10px" tag={Link} to="/autopicker/departures">Departures</NavLink>
+              <NavLink style={{paddingTop:13}} tag={Link} to="/autopicker/departures">Departures</NavLink>
           </NavItem>
           <NavItem>
-              <NavLink padding = "10px" tag={Link} to="/autopicker/cars">cars</NavLink>
+              <NavLink style={{paddingTop:13}} tag={Link} to="/autopicker/cars">Cars</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+            <NavLink style={{paddingTop:13}} onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
             </NavItem>
           </Nav>
     } else if(localStorage.getItem(USER_ROLES)!=null && 
@@ -119,37 +120,37 @@ class AppNavbar extends Component {
                       localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
         <NavItem>
-            <NavLink tag={Link} to="/users/me">Me</NavLink>
+            <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
         </NavItem>
         <NavItem>
-          <NavLink padding = "10px" tag={Link} to="/autopicker/requests">Requests</NavLink>
+          <NavLink  style={{paddingTop:13}}  tag={Link} to="/autopicker/requests">Requests</NavLink>
         </NavItem>
         <NavItem>
-          <NavLink padding = "10px" tag={Link} to="/autopicker/departures">Departures</NavLink>
+          <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/departures">Departures</NavLink>
         </NavItem>
         <NavItem>
-          <NavLink padding = "10px" tag={Link} to="/autopicker/cars">Cars</NavLink>
+          <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/cars">Cars</NavLink>
         </NavItem>
         <NavItem>
-          <NavLink onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
+          <NavLink style={{paddingTop:13}}  onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
         </NavItem>
         </Nav>
     } else {
         navItems = <Nav className="ml-auto" navbar>
         <NavItem>
-            <NavLink tag={Link} to="/auth">Login</NavLink>
+            <NavLink  style={{paddingTop:13}} tag={Link} to="/auth">Login</NavLink>
         </NavItem>
         <NavItem>
-            <NavLink tag={Link} to="/auth/registration">Sing up</NavLink>
+            <NavLink  style={{paddingTop:13}} tag={Link} to="/auth/registration">Sing up</NavLink>
         </NavItem>
     </Nav>
     }
 
 
     return <Navbar color="dark" dark expand="md">
-      <NavbarBrand style={{marginLeft:10}} tag={Link} to="/">  Home</NavbarBrand>
+      <NavbarBrand style={{marginLeft:10}} tag={Link} to="/"><HomeOutlined /></NavbarBrand>
       <NavbarToggler onClick={this.toggle}/>
-      <Collapse isOpen={this.state.isOpen} navbar style={{float:'right'}}>
+      <Collapse isOpen={this.state.isOpen} navbar>
           {navItems}
       </Collapse>
     </Navbar>;

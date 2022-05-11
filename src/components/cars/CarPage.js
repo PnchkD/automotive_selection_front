@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import {  Card, Layout, Carousel, Divider, Descriptions, Button, Breadcrumb } from 'antd';
+import {  Card, Layout, Carousel, Divider, Descriptions, Button, Breadcrumb, message, Modal, Input } from 'antd';
 import { Image } from 'react-bootstrap';
 import { CAR_BASE_PHOTO } from '../../constants/constants.js';
-import { SearchOutlined, EditOutlined } from '@ant-design/icons';
-import { loadCar } from '../../services/cars/CarService';
+import { loadCar, addDescription } from '../../services/cars/CarService';
 import AppNavbar from '../../app/AppNavBar.js';
 import { Link } from 'react-router-dom';
 const { Content } = Layout;
-const { Meta } = Card;
+const { TextArea } = Input;
 
 class CarPage extends Component {
 
@@ -31,7 +30,13 @@ class CarPage extends Component {
             description : '',
             photos : [],
             inspectionStatus : '',
-        }, isLoading: true } 
+        }, isLoading: true, isDescriptionModalVisible: false },
+
+        this.handleDescriptionOk = this.handleDescriptionOk.bind(this);
+        this.handleDescriptionCancel = this.handleDescriptionCancel.bind(this); 
+        this.showDescriptionModal = this.showDescriptionModal.bind(this); 
+        this.handleChange = this.handleChange.bind(this);
+
     };
 
     async componentDidMount() {
@@ -40,6 +45,42 @@ class CarPage extends Component {
 				this.setState({ car: data, isLoading: false });
 			})
 	}
+
+    handleChange = (event) => {
+        const target = event.target;
+        const name = target.name;
+        let value = target.value;
+        let car = this.state.car;
+
+        car[name] = value;
+        this.setState({ car: car });
+    }
+
+    showDescriptionModal = () => {
+        this.setState({isDescriptionModalVisible: true});
+    };
+
+    handleDescriptionCancel = () => {
+        this.setState({isDescriptionModalVisible: false});
+    };
+
+    handleDescriptionOk = () => {
+
+        const descriptionReq = {
+            description: this.state.car.description
+        }
+
+        addDescription(descriptionReq, this.props.match.params.id)
+            .then(data => {
+                    message.success(data.message);
+                }).then(() => {
+                    this.componentDidMount();
+                })
+
+
+
+        this.setState({isDescriptionModalVisible: false});
+    };
 
     render() {
         const car  = this.state.car;
@@ -72,8 +113,12 @@ class CarPage extends Component {
                             <p>{car.description}</p>
                             <div className='row' style={{margin:'2%'}}>
                                 <Button style={{width:'30%'}}>Something more</Button>
-                                <Button style={{backgroundColor:'#0bb978',  width:'30%'}}>Add description</Button>
+                                <Button style={{backgroundColor:'#0bb978',  width:'30%'}} onClick={this.showDescriptionModal}>Add description</Button>
                             </div>
+                            <Modal title="Add description" visible={this.state.isDescriptionModalVisible} onOk={this.handleDescriptionOk} onCancel={this.handleDescriptionCancel}>
+                                <TextArea rows={4} style={{marginBottom:20}} type="text" name="description" id="description" value={car.description || ''}
+                                    onInput={this.handleChange} placeholder="Car description" required/>
+                            </Modal>
                         </Card>
                         </div>
                     </div>

@@ -4,7 +4,7 @@ import AppNavbar from '../../app/AppNavBar.js';
 import ErrorHandler from '../../handler/ErrorHandler.js';
 import ErrorNotifier from '../../handler/ErrorNotifiers.js';
 import { Checkbox, List, Divider, Layout, Form, Modal,  Input, InputNumber, Menu, DatePicker, Upload, message } from 'antd';
-import { loadCars, searchBy, create } from '../../services/cars/CarService';
+import { loadCars, searchBy, create, drop } from '../../services/cars/CarService';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import CarCard from './CarCard.js';
 import BrandSelector from '../selectors/BrandSelector.js';
@@ -35,6 +35,7 @@ class CarList extends Component {
 		this.handleNewCarCancel = this.handleNewCarCancel.bind(this);
 		this.createCar = this.createCar.bind(this);
         this.show = this.show.bind(this);
+        this.delete = this.delete.bind(this);
 
 	}
 
@@ -83,6 +84,14 @@ class CarList extends Component {
         this.props.history.push("/autopicker/cars/" + id);
     }
 
+    delete = (id) => {
+        drop(id)
+            .then(() => {
+                message.success("Car is successfully deleted")
+                this.componentDidMount();
+        })
+    }
+
 	async searchBy(name) {
 		let inputDesc = document.getElementsByName('descending');
 		let desc = inputDesc.checked ? 'true' : 'false';
@@ -120,7 +129,11 @@ class CarList extends Component {
 		}
 
 		const carsList = cars.map(car => {
-			return <CarCard car={car} show={() => this.show(car.id)}/> 
+			return <CarCard 
+                car={car} 
+                show={() => this.show(car.id)}
+                delete={() => this.delete(car.id)}
+                /> 
 		});
 
         const props = {

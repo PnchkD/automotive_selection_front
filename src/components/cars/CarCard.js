@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {  Card, Layout } from 'antd';
 import { Image } from 'react-bootstrap';
 import { CAR_BASE_PHOTO } from '../../constants/constants.js';
-import { SearchOutlined, EditOutlined } from '@ant-design/icons';
+import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 const { Content } = Layout;
 
 class CarCard extends Component {
@@ -19,7 +19,7 @@ class CarCard extends Component {
         return  <div className="site-card-border-less-wrapper">
         <Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
                                     <SearchOutlined key="show" onClick={() => this.props.show(car.id)}/>,
-                                    <EditOutlined key="edit"/>,
+                                    <DeleteOutlined key="delete" onClick={() => this.props.delete(car.id)}/>
                                     ]}>
             <Layout >
             <Content style={{display: 'flex', marginBottom:20}}>
