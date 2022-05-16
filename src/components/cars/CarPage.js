@@ -72,7 +72,7 @@ class CarPage extends Component {
 
         addDescription(descriptionReq, this.props.match.params.id)
             .then(data => {
-                    message.success(data.message);
+                    message.success("Description changed!");
                 }).then(() => {
                     this.componentDidMount();
                 })

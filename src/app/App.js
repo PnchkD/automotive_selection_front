@@ -11,6 +11,7 @@ import RecoveryCodeConfirmer from '../components/users/RecoveryCodeConfirmer.js'
 import NewPasswordForm from '../components/users/NewPasswordForm.js'
 import CarList from '../components/cars/CarList.js'
 import CarPage from '../components/cars/CarPage.js'
+import RequestList from '../components/requests/RequestList.js'
 
 
 class App extends Component {
@@ -33,7 +34,7 @@ class App extends Component {
           <Route path='/passwordChange' exact={true} component={NewPasswordForm}/>
           <Route path='/autopicker/cars' exact={true} component={CarList}/>
           <Route path='/autopicker/cars/:id' exact={true} component={CarPage}/>
-
+          <Route path='/autopicker/requests' exact={true} component={RequestList}/>
         </Switch>
      </Router>
       )
