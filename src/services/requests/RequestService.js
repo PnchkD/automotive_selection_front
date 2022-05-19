@@ -9,6 +9,14 @@ export function loadRequests() {
     return request(options);
 }
 
+export function loadPersonalRequests() {
+    const options = {
+        url: API_BASE_URL + "/api/v1/requests/user/" + localStorage.getItem('id'),
+        method: 'GET'
+    };
+    return request(options);
+}
+
 export function create(newRequestReq) {
     const options = {
         url: API_BASE_URL + '/api/v1/requests/create',
@@ -34,9 +42,17 @@ export function drop(id) {
     return request(options);
 }
 
-export function searchBy(name, desc, carName, brand, transmission, engineType, bodyType) {
+export function searchBy(name, desc, carName, brand, transmission, engineType, bodyType, driveUnit) {
     const options = {
-        url: API_BASE_URL + '/api/v1/autopicker/cars/?sortBy=' + name + '&desc=' + desc + '&search=name:' + carName + ',brand:' + brand + ',transmission:' + transmission  + ',engineType:' + engineType + ',bodyType:' + bodyType,
+        url: API_BASE_URL + '/api/v1/requests/?sortBy=' + name + '&desc=' + desc + '&search=name:' + carName + ',brand:' + brand + ',transmission:' + transmission  + ',engineType:' + engineType + ',bodyType:' + bodyType + ',driveUnit:' + driveUnit,
+        method: 'GET',
+    };
+    return request(options);
+}
+
+export function filterBy(name, value ) {
+    const options = {
+        url: API_BASE_URL + '/api/v1/requests/?sortBy=' + name + '&desc=' + true + '&search=' + name + ':' + value,
         method: 'GET',
     };
     return request(options);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../app/App.css';
-import { Layout, Row, Button, Carousel, Form, Modal,  Input, InputNumber, DatePicker, message, List, Avatar } from 'antd';
+import { Layout, Row, Button, Carousel, Input, message, List, Avatar } from 'antd';
 import carLogo from '../../assets/car-logo.png'
 import clockIcon from '../../assets/clock-logo.png'
 import cardoct1 from '../../assets/cardoct1.jpg'
@@ -8,11 +8,8 @@ import cardoct2 from '../../assets/cardoct2.jpg'
 import cardoct3 from '../../assets/cardoct3.jpg'
 import cardoct4 from '../../assets/cardoct4.jpg'
 import carPickerLogo from '../../assets/carPickerLogo.png'
-import BrandSelector from '../selectors/BrandSelector.js';
-import DriveUnitSelector from '../selectors/DriveUnitSelector.js';
-import BodyTypeSelector from '../selectors/BodyTypeSelector.js';
-import CarStateSelector from '../selectors/CarStateSelector.js';
 import { create } from '../../services/requests/RequestService.js'
+import NewRequestModal from '../requests/NewRequestModal'
 const { Header, Sider, Content } = Layout;
 const { TextArea } = Input;
 
@@ -110,32 +107,15 @@ class UserHomePage extends Component {
                             <div>
                                 <Button className='order-btn' onClick={this.showNewRequestModal}><span>Order</span></Button>
                             </div>
-                            <Modal title="Order auto-selection and become the proud owner of the car of your dreams" visible={this.state.newRequestModal} onOk={this.createRequest} onCancel={this.handleNewRequestCancel}>
-                                <Form id='newRequestForm'>
-                                    <Input style={{marginBottom:20}} type="text" name="type" id="type" placeholder='Type'/>
-                                    <InputNumber style={{marginBottom:20, width: '100%', height:50}} addonAfter="$" name="price" min={0} max={99999999} id="price" step="10" placeholder='Price in $'/>
-                                    <Input style={{marginBottom:20}} type="text" name="color" id="color" placeholder='Color'/>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <BrandSelector style={{marginBottom:20, width:'100%'}} name='brand' updateNewCarBrand={(value) => this.setState({brand: value})}/>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <DatePicker picker="year" style={{marginBottom:20, width:'100%'}} min={1900} max={2099} step="1" name="yearOfIssue" id="yearOfIssue" placeholder='Year of issue'/>
-                                        </div>
-                                    </div>
-                                
-                                    <Input style={{marginBottom:20}} type="number" name="mileage" id="mileage" placeholder='Mileage'/>
-                                    <Input style={{marginBottom:20}} type="text" name="engineType" id="engineType" placeholder='Engine type'/>
-                                    <DriveUnitSelector name='driveUnit' updateNewCarDriveUnit={(value) => this.setState({driveUnit: value})}/>
-                                    <BodyTypeSelector name='bodyType' updateNewCarBodyType={(value) => this.setState({bodyType: value})}/>
-                                    <Input style={{marginBottom:20}} type="text" name="engineCapacity" id="engineCapacity" placeholder='Engine capacity'/>
-                                    <Input style={{marginBottom:20}} type="text" name="transmission" id="transmission" placeholder='Transmission'/>
-                                    <CarStateSelector name='state' updateNewCarState={(value) => this.setState({carState: value})}/>  
-                                    <Input style={{marginBottom:20}} type="text" name="country" id="country" placeholder='Country'/>
-                                    <Input style={{marginBottom:20}} type="text" name="city" id="city" placeholder='City'/>
-                                    <TextArea rows={4} style={{marginBottom:20}} type="text" name="wishes" id="wishes" placeholder='Wishes'/>              
-                                </Form> 
-                            </Modal>
+                            <NewRequestModal 
+                                visible={this.state.newRequestModal}
+                                onOk={this.createRequest}
+                                onCancel={this.handleNewRequestCancel}
+                                updateNewCarBrand={(value) => this.setState({brand: value})}
+                                updateNewCarDriveUnit={(value) => this.setState({driveUnit: value})}
+                                updateNewCarBodyType={(value) => this.setState({bodyType: value})}
+                                updateNewCarState={(value) => this.setState({carState: value})}
+                            />
                         </Row>
                     </Header>
                     <Content>

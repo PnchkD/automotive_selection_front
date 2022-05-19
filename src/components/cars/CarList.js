@@ -3,7 +3,7 @@ import { Button, Label, FormGroup } from 'reactstrap';
 import AppNavbar from '../../app/AppNavBar.js';
 import ErrorHandler from '../../handler/ErrorHandler.js';
 import ErrorNotifier from '../../handler/ErrorNotifiers.js';
-import { Checkbox, List, Divider, Layout, Form, Modal,  Input, InputNumber, Menu, DatePicker, Upload, message } from 'antd';
+import { Checkbox, List, Divider, Layout, Form, Modal,  Input, InputNumber, Menu, DatePicker, Upload, message, Card } from 'antd';
 import { loadCars, searchBy, create, drop } from '../../services/cars/CarService';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import CarCard from './CarCard.js';
@@ -13,7 +13,7 @@ import BodyTypeSelector from '../selectors/BodyTypeSelector.js';
 import CarStateSelector from '../selectors/CarStateSelector.js';
 import { InboxOutlined } from '@ant-design/icons';
 import {beforeUpload, getBase64} from '../../util/pictureLoaderUtil'
-import { IMAGE_LOADER_MOCKY_URL } from '../../constants/constants';
+import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
 const { Dragger } = Upload;
 const { Sider, Content } = Layout;
 
@@ -129,11 +129,14 @@ class CarList extends Component {
 		}
 
 		const carsList = cars.map(car => {
-			return <CarCard 
-                car={car} 
-                show={() => this.show(car.id)}
-                delete={() => this.delete(car.id)}
-                /> 
+			return <div className="site-card-border-less-wrapper">
+                    <Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
+                                                <SearchOutlined key="show" onClick={() => this.show(car.id)}/>,
+                                                <DeleteOutlined key="delete" onClick={() => this.delete(car.id)}/>
+                                                ]}>
+                        <CarCard car={car}/>
+                    </Card>
+            </div> 
 		});
 
         const props = {

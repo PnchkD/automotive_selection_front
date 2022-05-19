@@ -11,7 +11,7 @@ class BodyTypeSelector extends Component {
     render() {
 
         return <div>
-             <Select placeholder="Body type" name='bodyType' style={{ width: 'max', marginBottom:20 }} onChange={this.props.updateNewCarBodyType}>
+             <Select placeholder="Body type" name='bodyType' style={{ width: '100%', marginBottom:20 }} onChange={this.props.updateNewCarBodyType}>
                 <Option value="SEDAN">SEDAN</Option>
                 <Option value="UNIVERSAL">UNIVERSAL</Option>
                 <Option value="HATCHBACK">HATCHBACK</Option>

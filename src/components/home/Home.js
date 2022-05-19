@@ -35,10 +35,10 @@ class Home extends Component {
             <div className='text-white'>
                 <h1 className='mb-1'>HELLO!</h1>
                 <Link className='btn btn-outline-light btn-lg' tag={Link} to='/auth' role='button'>
-                Sing in
+                  Sing in
                 </Link>
                 <Link className='btn btn-outline-light btn-lg' tag={Link} to='/auth/registration' role='button'>
-                Registration
+                  Registration
                 </Link>
             </div>
             </div>

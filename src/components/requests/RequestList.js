@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import AppNavbar from '../../app/AppNavBar.js';
-import ErrorHandler from '../../handler/ErrorHandler.js';
 import ErrorNotifier from '../../handler/ErrorNotifiers.js';
-import { Checkbox, List, Divider, Layout, Form, Modal,  Input, InputNumber, Menu, DatePicker, Upload, message } from 'antd';
-import { loadRequests, searchBy, create, drop } from '../../services/requests/RequestService';
+import { Checkbox, List, Divider, Layout, Input, Menu, Upload, message } from 'antd';
+import { loadRequests, searchBy, drop, filterBy } from '../../services/requests/RequestService';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import RequestCard from './RequestCard.js';
 import BrandSelector from '../selectors/BrandSelector.js';
 import DriveUnitSelector from '../selectors/DriveUnitSelector.js';
 import BodyTypeSelector from '../selectors/BodyTypeSelector.js';
-import CarStateSelector from '../selectors/CarStateSelector.js';
-import { InboxOutlined } from '@ant-design/icons';
-const { Dragger } = Upload;
 const { Sider, Content } = Layout;
 
 class RequestList extends Component {
@@ -31,7 +27,6 @@ class RequestList extends Component {
 		this.componentDidMount = this.componentDidMount.bind(this);
         this.show = this.show.bind(this);
         this.delete = this.delete.bind(this);
-
 	}
 
 	componentDidMount() {
@@ -68,7 +63,14 @@ class RequestList extends Component {
 		let engineType =  engineTypeInput != null ? engineTypeInput.value : '';
 		let bodyType =  bodyTypeInput != null ? bodyTypeInput.value : '';
 
-		searchBy(name, desc, RequestName, brand, transmission, engineType, bodyType)
+		searchBy(name, desc, RequestName, brand, transmission, engineType, bodyType, '')
+			.then(data => {
+				this.setState({ Requests: data.RequestsDTO, isLoading: false });
+			})
+	}
+
+    async filterBy(fieldName, value) {
+		filterBy(fieldName, value)
 			.then(data => {
 				this.setState({ Requests: data.RequestsDTO, isLoading: false });
 			})
@@ -83,9 +85,9 @@ class RequestList extends Component {
 
 		const RequestsList = Requests.map(Request => {
 			return <RequestCard 
-                Request={Request} 
-                show={() => this.show(Request.id)}
-                delete={() => this.delete(Request.id)}
+                    Request={Request} 
+                    show={() => this.show(Request.id)}
+                    delete={() => this.delete(Request.id)}
                 /> 
 		});
 
@@ -113,27 +115,38 @@ class RequestList extends Component {
                                             <Menu.Item key='4'>
                                                 <Input id="transmissionInput" placeholder="Transmission" name="transmission" type="text"/>
                                             </Menu.Item>
-                                            <Menu.Item key='4'>
+                                            <Menu.Item key='5'>
                                                 <Input id="engineTypeInput" placeholder="Engine type" name="engineType" type="text"/>
                                             </Menu.Item>
-                                            <Menu.Item key='4'>
+                                            <Menu.Item key='6'>
                                                 <Input id="bodyTypeInput" placeholder="Body type" name="bodyType" type="text"/>
                                             </Menu.Item>
-                                            <Menu.Item key='5'>
+                                            <Menu.Item key='7'>
                                                 <Button onClick={() => this.searchBy('id')} color="danger">search</Button>
                                             </Menu.Item>
                                         </SubMenu>
-                                        <SubMenu key="6" title="Sort by">
-                                            <Menu.Item key="7">
-                                                <a href="#" onClick={() => this.searchBy('name')}>Name</a>
-                                            </Menu.Item>
-                                            <Menu.Item key="8">
-                                                <a href="#" onClick={() => this.searchBy('brand')}>Brand</a>
-                                            </Menu.Item>
+                                        <SubMenu key="8" title="Filter by">
                                             <Menu.Item key="9">
-                                                <a href="#" onClick={() => this.searchBy('price')}>Price</a>
+                                                <BrandSelector  name='brand' updateNewCarBrand={(value) => this.filterBy('brand', value)}/>
                                             </Menu.Item>
                                             <Menu.Item key="10">
+                                                <DriveUnitSelector name='driveUnit' updateNewCarDriveUnit={(value) => this.filterBy('driveUnit', value)}/>
+                                            </Menu.Item>
+                                            <Menu.Item key="11">
+                                                <BodyTypeSelector name='bodyType' updateNewCarBodyType={(value) => this.filterBy('bodyType', value)}/>
+                                            </Menu.Item>
+                                        </SubMenu>
+                                        <SubMenu key="12" title="Sort by">
+                                            <Menu.Item key="13">
+                                                <a href="#" onClick={() => this.searchBy('name')}>Name</a>
+                                            </Menu.Item>
+                                            <Menu.Item key="14">
+                                                <a href="#" onClick={() => this.searchBy('brand')}>Brand</a>
+                                            </Menu.Item>
+                                            <Menu.Item key="15">
+                                                <a href="#" onClick={() => this.searchBy('price')}>Price</a>
+                                            </Menu.Item>
+                                            <Menu.Item key="16">
                                                 <span><Checkbox style={{marginRight:8}} id="descCheck" name="descending" type="checkbox"/>Descending</span>
                                             </Menu.Item>
                                         </SubMenu>

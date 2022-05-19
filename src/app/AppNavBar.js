@@ -42,6 +42,9 @@ class AppNavbar extends Component {
                 <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
             </NavItem>
             <NavItem>
+                <NavLink  style={{paddingTop:13}}  tag={Link} to="/users/requests">My requests</NavLink>
+            </NavItem>
+            <NavItem>
                 <NavLink  style={{paddingTop:13}} tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
             <NavItem>
@@ -61,6 +64,9 @@ class AppNavbar extends Component {
         navItems = <Nav className="ml-auto" navbar>
             <NavItem>
                 <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
+            </NavItem>            
+            <NavItem>
+                <NavLink  style={{paddingTop:13}}  tag={Link} to="/users/requests">My requests</NavLink>
             </NavItem>
             <NavItem>
                 <NavLink  style={{paddingTop:13}}  tag={Link} to="/admin/users">Users</NavLink>
@@ -90,6 +96,9 @@ class AppNavbar extends Component {
                 <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
             </NavItem>
             <NavItem>
+                <NavLink  style={{paddingTop:13}}  tag={Link} to="/users/requests">My requests</NavLink>
+            </NavItem>
+            <NavItem>
           <NavLink  style={{paddingTop:13}}  onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
             </NavItem>
           </Nav>
@@ -100,6 +109,9 @@ class AppNavbar extends Component {
           navItems = <Nav className='ml-auto' navbar>
           <NavItem>
             <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
+          </NavItem>
+          <NavItem>
+              <NavLink  style={{paddingTop:13}}  tag={Link} to="/users/requests">My requests</NavLink>
           </NavItem>
           <NavItem>
               <NavLink style={{paddingTop:13}} tag={Link} to="/autopicker/requests">Requests</NavLink>
