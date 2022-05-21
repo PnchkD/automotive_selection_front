@@ -329,7 +329,7 @@ tbody {
   width: 100%;
   display: none;
   position: absolute;
-  top: 80px;
+  top: 60px;
   margin-left: -23px;
   padding: 3px 7px;
   background-color: #fff;
@@ -355,6 +355,14 @@ tbody {
 
 .ant-card-actions .anticon-user-switch::after {
   content: "Change roles";
+}
+
+.ant-card-actions .anticon-car::after {
+  content: "Create ticket";
+}
+
+.ant-card-actions .anticon-delete::after {
+  content: "Delete";
 }
 
 .ant-select-arrow {
@@ -412,7 +420,7 @@ tbody {
   margin: 0;
   padding: 0;
   margin-top: 24px;
-  width: 180%;
+  width: 180px;
   height: 40px;
   background: #EF4722;
   border-radius: 11px;
@@ -443,7 +451,7 @@ tbody {
   margin-left: 2%;
   padding: 0;
   margin-top: 24px;
-  width: 10%;
+  width: 150px;
   height: 40px;
   background: #EF4722;
   border-radius: 11px;
@@ -474,4 +482,9 @@ tbody {
   font-family: 'Open Sans', sans serif;
   font-size: 20px;
   font-weight: bold;
+}
+
+.ticket-car-select .ant-select-selection--single {
+  height:100px;
+  padding:10px 10px 10px 10px;
 }

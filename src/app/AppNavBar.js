@@ -51,7 +51,7 @@ class AppNavbar extends Component {
                 <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/requests">Requests</NavLink>
             </NavItem>
             <NavItem>
-                <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/departures">Departures</NavLink>
+                <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/tickets">Tickets</NavLink>
             </NavItem>
             <NavItem>
                 <NavLink style={{paddingTop:13}} onClick={this.logout} tag={Link} to="/auth">Log Out</NavLink>
@@ -117,7 +117,7 @@ class AppNavbar extends Component {
               <NavLink style={{paddingTop:13}} tag={Link} to="/autopicker/requests">Requests</NavLink>
           </NavItem>
           <NavItem>
-              <NavLink style={{paddingTop:13}} tag={Link} to="/autopicker/departures">Departures</NavLink>
+              <NavLink style={{paddingTop:13}} tag={Link} to="/autopicker/tickets">Tickets</NavLink>
           </NavItem>
           <NavItem>
               <NavLink style={{paddingTop:13}} tag={Link} to="/autopicker/cars">Cars</NavLink>
@@ -138,7 +138,7 @@ class AppNavbar extends Component {
           <NavLink  style={{paddingTop:13}}  tag={Link} to="/autopicker/requests">Requests</NavLink>
         </NavItem>
         <NavItem>
-          <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/departures">Departures</NavLink>
+          <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/tickets">Tickets</NavLink>
         </NavItem>
         <NavItem>
           <NavLink  style={{paddingTop:13}} tag={Link} to="/autopicker/cars">Cars</NavLink>

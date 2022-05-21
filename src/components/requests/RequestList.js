@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import AppNavbar from '../../app/AppNavBar.js';
 import ErrorNotifier from '../../handler/ErrorNotifiers.js';
-import { Checkbox, List, Divider, Layout, Input, Menu, Upload, message } from 'antd';
+import { Checkbox, List, Divider, Layout, Input, Menu, message, Card } from 'antd';
+import { CarOutlined, DeleteOutlined } from '@ant-design/icons';
 import { loadRequests, searchBy, drop, filterBy } from '../../services/requests/RequestService';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import RequestCard from './RequestCard.js';
@@ -84,12 +85,19 @@ class RequestList extends Component {
 		}
 
 		const RequestsList = Requests.map(Request => {
-			return <RequestCard 
-                    Request={Request} 
-                    show={() => this.show(Request.id)}
-                    delete={() => this.delete(Request.id)}
-                /> 
-		});
+			return <div className="site-card-border-less-wrapper">
+                        <Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
+                                        <CarOutlined key="show" onClick={this.showNewTicketModal}/>,
+                                        <DeleteOutlined key="delete" onClick={() => this.props.delete(Request.id)}/>
+                                        ]}>
+                            <RequestCard 
+                                Request={Request} 
+                                show={() => this.show(Request.id)}
+                                delete={() => this.delete(Request.id)}
+                            /> 
+                        </Card>
+                    </div>
+		        });
 
 		return (
 			<div>

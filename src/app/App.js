@@ -13,7 +13,7 @@ import NewPasswordForm from '../components/users/NewPasswordForm.js'
 import CarList from '../components/cars/CarList.js'
 import CarPage from '../components/cars/CarPage.js'
 import RequestList from '../components/requests/RequestList.js'
-import DepartureList from '../components/departures/DepartureList.js'
+import TicketList from '../components/tickets/TicketList.js'
 
 class App extends Component {
   state = {
@@ -37,7 +37,7 @@ class App extends Component {
           <Route path='/autopicker/cars' exact={true} component={CarList}/>
           <Route path='/autopicker/cars/:id' exact={true} component={CarPage}/>
           <Route path='/autopicker/requests' exact={true} component={RequestList}/>
-          <Route path='/autopicker/departures' exact={true} component={DepartureList}/>
+          <Route path='/autopicker/tickets' exact={true} component={TicketList}/>
         </Switch>
      </Router>
       )

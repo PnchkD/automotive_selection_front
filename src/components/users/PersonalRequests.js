@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AppNavbar from '../../app/AppNavBar.js';
 import ErrorNotifier from '../../handler/ErrorNotifiers.js';
-import { List, Divider, Layout, message, Button } from 'antd';
+import { List, Divider, Layout, message, Button, Card } from 'antd';
 import { loadPersonalRequests, create, drop } from '../../services/requests/RequestService';
 import RequestCard from '../requests/RequestCard.js';
 import NewRequestModal from '../requests/NewRequestModal'
@@ -36,7 +36,6 @@ class RequestList extends Component {
 	}
 
     createRequest = (e) => {
-        debugger
         const data = new FormData(e.currentTarget.parentElement.parentElement.parentElement.querySelector('#newRequestForm'));
 
         const newRequestReq = {
@@ -96,11 +95,15 @@ class RequestList extends Component {
 		}
 
 		const RequestsList = Requests.map(Request => {
-			return <RequestCard 
+			return <div className="site-card-border-less-wrapper">
+            <Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}}>
+                <RequestCard 
                     Request={Request} 
                     show={() => this.show(Request.id)}
                     delete={() => this.delete(Request.id)}
                 /> 
+            </Card>
+            </div>
 		});
 
 		return (
@@ -110,7 +113,7 @@ class RequestList extends Component {
 					<Content  style={{
 							padding: '0 50px',
 						}}>
-						<Divider style={{fontSize:40}} orientation="left">Requests</Divider>
+						<Divider style={{fontSize:40}} orientation="left">Personal requests</Divider>
                         <div>
                             <Button className='order-btn' onClick={this.showNewRequestModal}><span>New request</span></Button>
                         </div>
@@ -141,7 +144,6 @@ class RequestList extends Component {
 						</Layout>
 						</Content>
 					</Layout>
-				<ErrorNotifier/>
 			</div>
 		);
 	}

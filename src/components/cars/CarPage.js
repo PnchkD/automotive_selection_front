@@ -3,7 +3,7 @@ import {  Card, Layout, Carousel, Divider, Descriptions, Button, Breadcrumb, mes
 import { Image } from 'react-bootstrap';
 import { CAR_BASE_PHOTO } from '../../constants/constants.js';
 import { loadCar, addDescription } from '../../services/cars/CarService';
-import { create } from '../../services/departures/DepartureService';
+import { create } from '../../services/tickets/TicketService';
 import AppNavbar from '../../app/AppNavBar.js';
 import { Link } from 'react-router-dom';
 const { Content } = Layout;
