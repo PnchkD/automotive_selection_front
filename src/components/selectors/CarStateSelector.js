@@ -11,7 +11,7 @@ class CarStateSelector extends Component {
     render() {
 
         return <div>
-             <Select placeholder="Car state" name='carState' style={{ width: 'max', marginBottom:20 }} onChange={this.props.updateNewCarState}>
+             <Select placeholder="Car state" name='carState' style={{ width: 'max', marginBottom:20 }} onChange={(value) => this.props.updateNewCarState(value)}>
                 <Option value="NEW">NEW</Option>
                 <Option value="USED">USED</Option>
                 <Option value="EMERGENCY">EMERGENCY</Option>

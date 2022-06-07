@@ -4,6 +4,7 @@ import { USER_ICON } from '../../constants/constants.js';
 import TicketCard from '../tickets/TicketCard.js';
 import NewTicketModal from '../tickets/NewTicketModal.js';
 import { create, drop } from '../../services/tickets/TicketService.js'
+import { DeleteOutlined, CarOutlined } from '@ant-design/icons';
 const { Meta } = Card;
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -80,7 +81,12 @@ class RequestCard extends Component {
 		}) : ''
 
 
-        return <Layout>
+        return <div className="site-card-border-less-wrapper">
+        <Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
+                        <CarOutlined key="show" onClick={this.showNewTicketModal}/>,
+                        <DeleteOutlined key="delete" onClick={() => this.props.delete(Request.id)}/>
+                        ]}>
+                            <Layout>
                 <Content className='request-card-container'>
                     <Tabs defaultActiveKey="1">
                         <TabPane tab="Base info" key="1" style={{padding:20, backgroundColor: 'white'}}>
@@ -131,7 +137,8 @@ class RequestCard extends Component {
                     onCancel={this.handleNewTicketCancel}
                 />
             </Layout>
-
+            </Card>
+            </div>
     }
 }
 

@@ -13,10 +13,10 @@ class RequestList extends Component {
 		super(props);
 		this.state = { Requests: [], isLoading: true, newRequestModal: false, 
             request: {
-                brand: 'Nissan',
-                driveUnit: 'FULL',
-                bodyType: 'SEDAN',
-                carState: 'NEW'
+                brand: null,
+                driveUnit: null,
+                bodyType: null,
+                carState: null
             }, 
             newRequestModal: false,
         };
@@ -56,7 +56,7 @@ class RequestList extends Component {
             state: this.state.request.carState,
             userId: Number(localStorage.getItem('id'))
         }
-
+        debugger
         create(newRequestReq)
             .then((data) => {
                 if(data == null) {
@@ -121,10 +121,10 @@ class RequestList extends Component {
                                 visible={this.state.newRequestModal}
                                 onOk={this.createRequest}
                                 onCancel={this.handleNewRequestCancel}
-                                updateNewCarBrand={(value) => this.setState({brand: value})}
-                                updateNewCarDriveUnit={(value) => this.setState({driveUnit: value})}
-                                updateNewCarBodyType={(value) => this.setState({bodyType: value})}
-                                updateNewCarState={(value) => this.setState({carState: value})}
+                                updateNewCarBrand={(value) => { const request = this.state.request; request.brand = value; this.setState({request: request})}}
+                                updateNewCarDriveUnit={(value) => { const request = this.state.request; request.driveUnit = value; this.setState({request: request})}}
+                                updateNewCarBodyType={(value) => { const request = this.state.request; request.bodyType = value; this.setState({request: request})}}
+                                updateNewCarState={(value) =>  { const request = this.state.request; request.carState = value; this.setState({request: request})}}
                             />
 						<Layout
 							style={{

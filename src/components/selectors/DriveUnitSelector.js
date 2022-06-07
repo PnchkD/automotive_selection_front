@@ -11,7 +11,7 @@ class DriveUnitSelector extends Component {
     render() {
 
         return <div>
-             <Select placeholder="Drive unit" name='driveUnit' style={{ width: '100%', marginBottom:20 }} onChange={this.props.updateNewCarDriveUnit}>
+             <Select placeholder="Drive unit" name='driveUnit' style={{ width: '100%', marginBottom:20 }} onChange={(value) => this.props.updateNewCarDriveUnit(value)}>
                 <Option value="FULL">FULL</Option>
                 <Option value="REAR">REAR</Option>
                 <Option value="FRONT">FRONT</Option>

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import AppNavbar from '../../app/AppNavBar.js';
 import ErrorNotifier from '../../handler/ErrorNotifiers.js';
-import { Checkbox, List, Divider, Layout, Input, Menu, message, Card } from 'antd';
-import { CarOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Checkbox, List, Divider, Layout, Input, Menu, message } from 'antd';
 import { loadRequests, searchBy, drop, filterBy } from '../../services/requests/RequestService';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import RequestCard from './RequestCard.js';
@@ -16,7 +15,7 @@ class RequestList extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { Requests: [], isLoading: true, newRequestModal: false, 
+		this.state = { Requests: null, isLoading: true, newRequestModal: false, 
             newRequest: {
                 brand: 'Nissan',
                 driveUnit: 'FULL',
@@ -66,14 +65,14 @@ class RequestList extends Component {
 
 		searchBy(name, desc, RequestName, brand, transmission, engineType, bodyType, '')
 			.then(data => {
-				this.setState({ Requests: data.RequestsDTO, isLoading: false });
+				this.setState({ Requests: data.requests, isLoading: false });
 			})
 	}
 
     async filterBy(fieldName, value) {
 		filterBy(fieldName, value)
 			.then(data => {
-				this.setState({ Requests: data.RequestsDTO, isLoading: false });
+				this.setState({ Requests: data.requests, isLoading: false });
 			})
 	}
 
@@ -85,18 +84,12 @@ class RequestList extends Component {
 		}
 
 		const RequestsList = Requests.map(Request => {
-			return <div className="site-card-border-less-wrapper">
-                        <Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
-                                        <CarOutlined key="show" onClick={this.showNewTicketModal}/>,
-                                        <DeleteOutlined key="delete" onClick={() => this.props.delete(Request.id)}/>
-                                        ]}>
-                            <RequestCard 
+			return <RequestCard 
                                 Request={Request} 
                                 show={() => this.show(Request.id)}
                                 delete={() => this.delete(Request.id)}
                             /> 
-                        </Card>
-                    </div>
+
 		        });
 
 		return (

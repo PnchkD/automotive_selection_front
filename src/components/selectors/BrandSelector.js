@@ -36,7 +36,7 @@ class BrandSelector extends Component {
 		});
 
         return <div>
-             <Select placeholder="Brand" name='brand' style={{ width: '100%', marginBottom:20 }} onChange={this.props.updateNewCarBrand}>
+             <Select placeholder="Brand" name='brand' style={{ width: '100%', marginBottom:20 }} onChange={(value) => this.props.updateNewCarBrand(value)}>
                 {brandsList}
             </Select>
         </div>

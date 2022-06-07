@@ -21,7 +21,7 @@ class NewRequestModal extends Component {
             <Input style={{marginBottom:20}} type="text" name="color" id="color" placeholder='Color'/>
             <div className='row'>
                 <div className='col-md-6'>
-                    <BrandSelector style={{marginBottom:20, width:'100%'}} name='brand' updateNewCarBrand={this.props.updateNewCarBrand}/>
+                    <BrandSelector style={{marginBottom:20, width:'100%'}} name='brand' updateNewCarBrand={(value) => this.props.updateNewCarBrand(value)}/>
                 </div>
                 <div className='col-md-6'>
                     <DatePicker picker="year" style={{marginBottom:20, width:'100%'}} min={1900} max={2099} step="1" name="yearOfIssue" id="yearOfIssue" placeholder='Year of issue'/>
@@ -30,11 +30,11 @@ class NewRequestModal extends Component {
         
             <Input style={{marginBottom:20}} type="number" name="mileage" id="mileage" placeholder='Mileage'/>
             <Input style={{marginBottom:20}} type="text" name="engineType" id="engineType" placeholder='Engine type'/>
-            <DriveUnitSelector name='driveUnit' updateNewCarDriveUnit={this.props.updateNewCarDriveUnit}/>
-            <BodyTypeSelector name='bodyType' updateNewCarBodyType={this.props.updateNewCarBodyType}/>
+            <DriveUnitSelector name='driveUnit' updateNewCarDriveUnit={(value) => this.props.updateNewCarDriveUnit(value)}/>
+            <BodyTypeSelector name='bodyType' updateNewCarBodyType={(value) => this.props.updateNewCarBodyType(value)}/>
             <Input style={{marginBottom:20}} type="text" name="engineCapacity" id="engineCapacity" placeholder='Engine capacity'/>
             <Input style={{marginBottom:20}} type="text" name="transmission" id="transmission" placeholder='Transmission'/>
-            <CarStateSelector name='state' updateNewCarState={this.props.updateNewCarState}/>  
+            <CarStateSelector name='state' updateNewCarState={(value) => this.props.updateNewCarState(value)}/>  
             <Input style={{marginBottom:20}} type="text" name="country" id="country" placeholder='Country'/>
             <Input style={{marginBottom:20}} type="text" name="city" id="city" placeholder='City'/>
             <TextArea rows={4} style={{marginBottom:20}} type="text" name="wishes" id="wishes" placeholder='Wishes'/>              
