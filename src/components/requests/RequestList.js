@@ -49,8 +49,8 @@ class RequestList extends Component {
     }
 
 	async searchBy(name) {
-		let inputDesc = document.getElementsByName('descending');
-		let desc = inputDesc.checked ? 'true' : 'false';
+		let inputDesc = document.getElementsByName('descending')[0];
+		let desc = inputDesc.checked ? 'false' : 'true';
 		let nameInput = document.getElementById("nameInput");
 		let brandInput = document.getElementById("brandInput");
 		let transmissionInput = document.getElementById("transmissionInput");
@@ -107,9 +107,6 @@ class RequestList extends Component {
                                 <Sider width={'20%'}>
                                     <Menu mode="inline">
                                         <SubMenu key="1" title="Search by">
-                                            <Menu.Item key='2'>
-                                                <Input id="nameInput" placeholder="Name" name="name" type="text"/>
-                                            </Menu.Item>
                                             <Menu.Item key='3'>
                                                 <Input id="brandInput" placeholder="Brand" name="brand" type="text"/>
                                             </Menu.Item>
@@ -118,9 +115,6 @@ class RequestList extends Component {
                                             </Menu.Item>
                                             <Menu.Item key='5'>
                                                 <Input id="engineTypeInput" placeholder="Engine type" name="engineType" type="text"/>
-                                            </Menu.Item>
-                                            <Menu.Item key='6'>
-                                                <Input id="bodyTypeInput" placeholder="Body type" name="bodyType" type="text"/>
                                             </Menu.Item>
                                             <Menu.Item key='7'>
                                                 <Button onClick={() => this.searchBy('id')} color="danger">search</Button>
@@ -138,9 +132,6 @@ class RequestList extends Component {
                                             </Menu.Item>
                                         </SubMenu>
                                         <SubMenu key="12" title="Sort by">
-                                            <Menu.Item key="13">
-                                                <a href="#" onClick={() => this.searchBy('name')}>Name</a>
-                                            </Menu.Item>
                                             <Menu.Item key="14">
                                                 <a href="#" onClick={() => this.searchBy('brand')}>Brand</a>
                                             </Menu.Item>

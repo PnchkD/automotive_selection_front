@@ -4,7 +4,7 @@ import AppNavbar from '../../app/AppNavBar.js';
 import ErrorHandler from '../../handler/ErrorHandler.js';
 import ErrorNotifier from '../../handler/ErrorNotifiers.js';
 import { Checkbox, List, Divider, Layout, Form, Modal,  Input, InputNumber, Menu, DatePicker, Upload, message, Card } from 'antd';
-import { loadCars, searchBy, create, drop } from '../../services/cars/CarService';
+import { loadCars, searchBy, create, drop, filterBy } from '../../services/cars/CarService';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import CarCard from './CarCard.js';
 import BrandSelector from '../selectors/BrandSelector.js';
@@ -122,6 +122,13 @@ class CarList extends Component {
         )
     }
 
+	async filterBy(fieldName, value) {
+		filterBy(fieldName, value)
+			.then(data => {
+				this.setState({ cars: data.carsDTO, isLoading: false });
+			})
+	}
+
 	render() {
 		const { cars, isLoading } = this.state;
 		if (isLoading) {
@@ -177,19 +184,24 @@ class CarList extends Component {
                                         <Menu.Item key='4'>
 											<Input id="engineTypeInput" placeholder="Engine type" name="engineType" type="text"/>
 										</Menu.Item>
-                                        <Menu.Item key='4'>
-											<Input id="bodyTypeInput" placeholder="Body type" name="bodyType" type="text"/>
-										</Menu.Item>
 										<Menu.Item key='5'>
 											<Button onClick={() => this.searchBy('id')} color="danger">search</Button>
 										</Menu.Item>
 									</SubMenu>
+									<SubMenu key="8" title="Filter by">
+                                            <Menu.Item key="9">
+                                                <BrandSelector  name='brand' updateNewCarBrand={(value) => this.filterBy('brand', value)}/>
+                                            </Menu.Item>
+                                            <Menu.Item key="10">
+                                                <DriveUnitSelector name='driveUnit' updateNewCarDriveUnit={(value) => this.filterBy('driveUnit', value)}/>
+                                            </Menu.Item>
+                                            <Menu.Item key="11">
+                                                <BodyTypeSelector name='bodyType' updateNewCarBodyType={(value) => this.filterBy('bodyType', value)}/>
+                                            </Menu.Item>
+                                    </SubMenu>
 									<SubMenu key="6" title="Sort by">
 										<Menu.Item key="7">
 											<a href="#" onClick={() => this.searchBy('name')}>Name</a>
-										</Menu.Item>
-										<Menu.Item key="8">
-											<a href="#" onClick={() => this.searchBy('brand')}>Brand</a>
 										</Menu.Item>
 										<Menu.Item key="9">
 											<a href="#" onClick={() => this.searchBy('price')}>Price</a>

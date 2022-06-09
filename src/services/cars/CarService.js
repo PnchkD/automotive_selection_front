@@ -50,3 +50,11 @@ export function addDescription(newDescriptionRequest, id) {
     };
     return request(options);
 }
+
+export function filterBy(name, value ) {
+    const options = {
+        url: API_BASE_URL + '/api/v1/autopicker/cars/?sortBy=' + name + '&desc=' + true + '&search=' + name + ':' + value,
+        method: 'GET',
+    };
+    return request(options);
+}
