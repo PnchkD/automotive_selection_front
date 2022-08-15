@@ -56,7 +56,6 @@ class RequestList extends Component {
             state: this.state.request.carState,
             userId: Number(localStorage.getItem('id'))
         }
-        debugger
         create(newRequestReq)
             .then((data) => {
                 if(data == null) {

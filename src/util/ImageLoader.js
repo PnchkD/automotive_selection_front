@@ -20,14 +20,14 @@ export default class ImageLoader extends Component {
                     <Dragger className='aside-dragger'
                         style={{ boxShadow:'0px 8px 16px 0px rgba(0,0,0,0.2)'}} 
                         name="file"
-                        listType="picture"
                         showUploadList={false}
-                        action={IMAGE_LOADER_MOCKY_URL}
+                        type="file"
+                        //action={IMAGE_LOADER_MOCKY_URL}
                         beforeUpload={beforeUpload}
                         onChange={this.handleUploadImageChange}>
                         {
-                            this.state.imageUrl ?
-                                <img src={this.state.imageUrl}
+                            this.state.imageUrl.presignedUrl ?
+                                <img src={this.state.imageUrl.presignedUrl}
                                      alt="avatar"
                                 />
                                 : <img src={USER_BASE_AVATAR} alt='avatar'/>
@@ -45,14 +45,14 @@ export default class ImageLoader extends Component {
 
     handleUploadImageChange = info => {
             // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl =>
+            // getBase64(info.file.originFileObj, imageUrl =>
 
-                this.setState({
-                    imageUrl: imageUrl,
-                    loading: false,
-                }, () => {
-                    this.props.handleImageUrlChange(this.state.imageUrl);
-                })
-            )
+            //     this.setState({
+            //         imageUrl: imageUrl,
+            //         loading: false,
+            //     }, () => {
+            this.props.handleImageUrlChange(info.fileList);
+            //     })
+            // )
     }
 }

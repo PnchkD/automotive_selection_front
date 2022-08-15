@@ -60,7 +60,7 @@ class NewPasswordForm extends React.Component {
                       />
                       <Button size="sm"
                         type="primary"
-                        htmlType="submit"
+                        htmltype="submit"
                         className="login-form-button"
                       >Confirm code</Button>
                       <Link style={{float:'left'}} to='/auth'>Back</Link>

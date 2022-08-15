@@ -47,7 +47,7 @@ class TicketList extends Component {
 		const TicketsList = Tickets.map(ticket => {
 			return <div className="site-card-border-less-wrapper">
 					<Card style={{boxShadow:'0px 0px 16px 8px rgba(0,0,0,0.2)'}} actions={[
-										<DeleteOutlined key="delete" onClick={() => this.props.delete(Ticket.id)}/>
+										<DeleteOutlined key="delete" onClick={() => this.delete(ticket.id)}/>
 										]}>
 					<TicketCard 
 						ticket={ticket} 

@@ -1,7 +1,7 @@
 import React from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
 import AppNavbar from '../../app/AppNavBar.js'
-import { Form, Icon, Input, Checkbox } from "antd";
+import { Form, Icon, Input, Checkbox, message } from "antd";
 import {Button} from 'react-bootstrap';
 import loginImg from '../../assets/registration.png'
 import { singUp } from '../../services/auth/AuthService.js';
@@ -51,8 +51,12 @@ class NameForm extends React.Component {
         };
 
 		singUp(sinfUpRequest)
-			.then(() => {
-				history.push("/auth")
+			.then((data) => {
+				if(data != null) {
+					history.push("/auth")
+				} else {
+					message.error('Please, check the correctness of the entered data')
+				}
 			})
 
 		event.preventDefault();
@@ -104,14 +108,14 @@ class NameForm extends React.Component {
 								prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)", margin:-14 }} />}
 								type="password"
 								name="password" value={this.state.password}
-								placeholder="Password"
+								placeholder="Password (from 8 to 16 characters)"
 								onChange={this.handleChange}
 								required
 								/>
 								<span style={{float:'right'}}>Are you a autopicker? <Checkbox id="autoPickerCheck" name="isAutoPicker" type="checkbox"/></span>
 							<Button size="sm"
 								type="primary"
-								htmlType="submit"
+								htmltype="submit"
 								className="login-form-button"
 							>Sing up</Button>
 							</FormItem>

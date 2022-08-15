@@ -49,21 +49,17 @@ class RequestList extends Component {
     }
 
 	async searchBy(name) {
-		let inputDesc = document.getElementsByName('descending')[0];
+		let inputDesc = document.getElementsByName('descending');
 		let desc = inputDesc.checked ? 'false' : 'true';
-		let nameInput = document.getElementById("nameInput");
 		let brandInput = document.getElementById("brandInput");
 		let transmissionInput = document.getElementById("transmissionInput");
 		let engineTypeInput = document.getElementById("engineTypeInput");
-		let bodyTypeInput = document.getElementById("bodyTypeInput");
 
-		let RequestName = nameInput != null ? nameInput.value : '';
 		let brand = brandInput != null ? brandInput.value : '';
 		let transmission =  transmissionInput != null ? transmissionInput.value : '';
 		let engineType =  engineTypeInput != null ? engineTypeInput.value : '';
-		let bodyType =  bodyTypeInput != null ? bodyTypeInput.value : '';
 
-		searchBy(name, desc, RequestName, brand, transmission, engineType, bodyType, '')
+		searchBy(name, desc, brand, transmission, engineType)
 			.then(data => {
 				this.setState({ Requests: data.requests, isLoading: false });
 			})
@@ -159,7 +155,6 @@ class RequestList extends Component {
 						</Layout>
 						</Content>
 					</Layout>
-				<ErrorNotifier/>
 			</div>
 		);
 	}

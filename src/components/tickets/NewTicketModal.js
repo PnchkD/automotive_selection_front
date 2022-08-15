@@ -16,10 +16,12 @@ class NewTicketModal extends Component {
     };
 
 	componentDidMount() {
-		loadCars()
-			.then(data => {
-				this.setState({ cars: data.carsDTO, isLoading: false });
-			})
+        if(localStorage.getItem('roles').includes('ROLE_AUTOPICKER')) {
+            loadCars()
+                .then(data => {
+                    this.setState({ cars: data.carsDTO, isLoading: false });
+                })
+        }
 	}
 
     render() {
@@ -29,7 +31,7 @@ class NewTicketModal extends Component {
         const carsList = cars.map(car => {
             const carPhoto = car.photos[0]==null ? CAR_BASE_PHOTO : car.photos[0];
 
-			return <Option value={car.id} key={car.id}>
+			return <Option value={car.name + car.id} key={car.id}>
                             <Layout >
                                 <Content style={{display: 'flex', marginBottom:20}}>
                                     <Image className='user-avatar'
@@ -47,7 +49,7 @@ class NewTicketModal extends Component {
                         <TextArea rows={1} style={{marginBottom:20}} type="text" name="ticketName" id="ticketName" placeholder="Name" required/>
                         <DatePicker picker="year" style={{marginBottom:20, width:'100%'}} min={2022} max={2099} step="1" name="dateOfDeparture" id="dateOfDeparture" placeholder='Date of departure'/>
                         <TextArea rows={4} style={{marginBottom:20}} type="text" name="ticketDescription" id="ticketDescription" placeholder="Description" required/>
-                        <Select className='ticket-car-select' placeholder="Choise car" name='car' style={{ width: '100%', marginBottom:20 }}>
+                        <Select className='ticket-car-select' placeholder="Choise car" name='car' style={{ width: '100%', marginBottom:20 }} showSearch>
                             {carsList}
                         </Select>
                     </Form> 

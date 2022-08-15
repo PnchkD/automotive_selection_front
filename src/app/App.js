@@ -14,6 +14,7 @@ import CarList from '../components/cars/CarList.js'
 import CarPage from '../components/cars/CarPage.js'
 import RequestList from '../components/requests/RequestList.js'
 import TicketList from '../components/tickets/TicketList.js'
+import OAuth2RedirectHandler from "../handler/OAuth2RedirectHandler.js"
 
 class App extends Component {
   state = {
@@ -38,6 +39,8 @@ class App extends Component {
           <Route path='/autopicker/cars/:id' exact={true} component={CarPage}/>
           <Route path='/autopicker/requests' exact={true} component={RequestList}/>
           <Route path='/autopicker/tickets' exact={true} component={TicketList}/>
+          <Route path="/oauth2/redirect" render={(props) =>
+                                       <OAuth2RedirectHandler {...props} />}/>
         </Switch>
      </Router>
       )

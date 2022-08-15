@@ -32,7 +32,7 @@ class BrandSelector extends Component {
 		}
 
         const brandsList = brands.map(brand => {
-            return <Option value={brand.name}>{brand.name}</Option>
+            return <Option key={brand.name} value={brand.name}>{brand.name}</Option>
 		});
 
         return <div>

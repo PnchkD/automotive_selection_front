@@ -64,7 +64,7 @@ class PasswordRecoveryHandler extends React.Component {
                       />
                       <Button size="sm"
                         type="primary"
-                        htmlType="submit"
+                        htmltype="submit"
                         className="login-form-button"
                       >Sing up</Button>
                       <Link style={{float:'left'}} to='/auth'>Sing in</Link>

@@ -42,9 +42,9 @@ export function drop(id) {
     return request(options);
 }
 
-export function searchBy(name, desc, carName, brand, transmission, engineType, bodyType, driveUnit) {
+export function searchBy(name, desc, brand, transmission, engineType) {
     const options = {
-        url: API_BASE_URL + '/api/v1/requests/?sortBy=' + name + '&desc=' + desc + '&search=name:' + carName + ',brand:' + brand + ',transmission:' + transmission  + ',engineType:' + engineType + ',bodyType:' + bodyType + ',driveUnit:' + driveUnit,
+        url: API_BASE_URL + '/api/v1/requests/?sortBy=' + name + '&desc=' + desc + '&search=brand:' + brand + ',transmission:' + transmission  + ',engineType:' + engineType,
         method: 'GET',
     };
     return request(options);

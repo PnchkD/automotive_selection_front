@@ -488,3 +488,19 @@ tbody {
   height:100px;
   padding:10px 10px 10px 10px;
 }
+
+.social-btn img {
+  height: 32px;
+}
+
+.social-btn.github img {
+  height: 32px;
+  margin-left: 3px;
+}
+
+.ant-form-item-control .social-form {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 30px;
+  height: 30px;
+}

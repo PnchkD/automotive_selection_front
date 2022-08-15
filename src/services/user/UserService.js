@@ -1,4 +1,4 @@
-import {request} from '../../util/APIUtils'
+import {request, s3request} from '../../util/APIUtils'
 import {API_BASE_URL} from '../../constants/constants';
 
 export function loadUsers() {
@@ -64,9 +64,9 @@ export function changeAvatar(avatarRequest, id) {
     const options = {
         url: API_BASE_URL + "/api/v1/users/" + id + "/avatar",
         method: 'PATCH',
-        body: JSON.stringify(avatarRequest)
+        body: avatarRequest
     };
-    return request(options);
+    return s3request(options);
 }
 
 export function searchBy(name, desc, firstName, lastName, email) {

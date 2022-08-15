@@ -23,7 +23,7 @@ class PersonalPage extends Component {
                 firstName: "",
                 lastName: "",
                 email: "",
-                avatar: ""
+                avatar: null
             },
                 isLoading: true,
                 isDataModalVisible: false,
@@ -59,14 +59,24 @@ class PersonalPage extends Component {
     }
 
     handleImageUrlChange = (imageUrl) => {
-        this.state.user.avatar = imageUrl;
-        const newAvatar = {
-            image: imageUrl
-        }
+        //this.state.user.avatar = imageUrl;
+        const formData = new FormData();
+        for(let photo of imageUrl){
+            formData.append('photos', photo.originFileObj);
+        }        // const newAvatar = {
+        //     image: imageUrl
+        // }
 
-        changeAvatar(newAvatar, this.state.id)
-            .then(data => {
-                ErrorHandler.runSuccess(data.message);
+        // fetch("http://localhost:8080/api/v1/users/" + this.state.id + "/avatar", {
+        //         method: "PATCH",
+        //         body: formData,
+        //         headers: {
+        //             "Authorization": localStorage.getItem("tokenType") + " " + localStorage.getItem("accessToken")
+        //         }
+        //     })
+        changeAvatar(formData, this.state.id)
+            .then(() => {
+                window.location.reload();
             })
     }
 

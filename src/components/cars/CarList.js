@@ -75,8 +75,14 @@ class CarList extends Component {
         }
 
         create(newCar)
-            .then(() => {
-                this.componentDidMount();
+            .then((data) => {
+                if(data != null) {
+                    this.componentDidMount();
+                    this.setState({newCarModal:false});
+                    message.success('Car is successfully created!')
+                } else {
+                    message.error('Please, fill all the fields!')
+                }
             })
     }
 
@@ -181,10 +187,10 @@ class CarList extends Component {
 										<Menu.Item key='4'>
 											<Input id="transmissionInput" placeholder="Transmission" name="transmission" type="text"/>
 										</Menu.Item>
-                                        <Menu.Item key='4'>
+                                        <Menu.Item key='5'>
 											<Input id="engineTypeInput" placeholder="Engine type" name="engineType" type="text"/>
 										</Menu.Item>
-										<Menu.Item key='5'>
+										<Menu.Item key='6'>
 											<Button onClick={() => this.searchBy('id')} color="danger">search</Button>
 										</Menu.Item>
 									</SubMenu>
@@ -199,18 +205,18 @@ class CarList extends Component {
                                                 <BodyTypeSelector name='bodyType' updateNewCarBodyType={(value) => this.filterBy('bodyType', value)}/>
                                             </Menu.Item>
                                     </SubMenu>
-									<SubMenu key="6" title="Sort by">
-										<Menu.Item key="7">
+									<SubMenu key="12" title="Sort by">
+										<Menu.Item key="13">
 											<a href="#" onClick={() => this.searchBy('name')}>Name</a>
 										</Menu.Item>
-										<Menu.Item key="9">
+										<Menu.Item key="14">
 											<a href="#" onClick={() => this.searchBy('price')}>Price</a>
 										</Menu.Item>
-										<Menu.Item key="10">
+										<Menu.Item key="15">
 											<span><Checkbox style={{marginRight:8}} id="descCheck" name="descending" type="checkbox"/>Descending</span>
 										</Menu.Item>
 									</SubMenu>
-                                    <Menu.Item key='5'>
+                                    <Menu.Item key='16'>
 											<Button onClick={this.showNewCarModal} style={{marginTop:10}} color="danger">New car</Button>
                                             <Modal title="Enter car data" visible={this.state.newCarModal} onOk={this.createCar} onCancel={this.handleNewCarCancel}>
                                                 <Form id='newCarForm'>
@@ -265,7 +271,6 @@ class CarList extends Component {
 						</Layout>
 						</Content>
 					</Layout>
-				<ErrorNotifier/>
 			</div>
 		);
 	}

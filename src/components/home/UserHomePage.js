@@ -9,9 +9,12 @@ import cardoct3 from '../../assets/cardoct3.jpg'
 import cardoct4 from '../../assets/cardoct4.jpg'
 import carPickerLogo from '../../assets/carPickerLogo.png'
 import { create } from '../../services/requests/RequestService.js'
+import AppNavbar from '../../app/AppNavBar.js';
 import NewRequestModal from '../requests/NewRequestModal'
+import { ACCESS_TOKEN } from '../../constants/constants';
 const { Header, Sider, Content } = Layout;
 const { TextArea } = Input;
+
 
 class UserHomePage extends Component {
   
@@ -34,6 +37,10 @@ class UserHomePage extends Component {
 	}
 
     showNewRequestModal = () => {
+        if(localStorage.getItem(ACCESS_TOKEN) == null) {
+            this.props.history.push('/auth')
+            message.success("First you need to enter your personal account or create a new!")
+        }
 		this.setState({newRequestModal:true});
 	};
 
@@ -94,6 +101,7 @@ class UserHomePage extends Component {
 
         return (
             <div>
+                <AppNavbar/>
                 <Layout>
                     <Header>
                         <Row className='user-home-page'>
@@ -148,7 +156,7 @@ class UserHomePage extends Component {
                                             <List.Item>
                                                 <List.Item.Meta
                                                 avatar={<Avatar src="https://av-podbor.by/img/ok.png" />}
-                                                title={<h5>{item.title}</h5>}
+                                                title={item.title}
                                                 />
                                             </List.Item>
                                             )}

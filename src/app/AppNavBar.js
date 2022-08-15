@@ -38,6 +38,7 @@ class AppNavbar extends Component {
                           localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
                           localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
+            <NavbarBrand style={{marginLeft:10}} tag={Link} to="/"><HomeOutlined /></NavbarBrand>
             <NavItem>
                 <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
             </NavItem>
@@ -62,6 +63,7 @@ class AppNavbar extends Component {
                       localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
                       !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
+            <NavbarBrand style={{marginLeft:10}} tag={Link} to="/"><HomeOutlined /></NavbarBrand>
             <NavItem>
                 <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
             </NavItem>            
@@ -80,6 +82,7 @@ class AppNavbar extends Component {
                       !localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
                       !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
+            <NavbarBrand style={{marginLeft:10}} tag={Link} to="/admin/users"><HomeOutlined /></NavbarBrand>
             <NavItem>
               <NavLink  style={{paddingTop:13}}  tag={Link} to="/admin/users">Users</NavLink>
             </NavItem>
@@ -92,6 +95,7 @@ class AppNavbar extends Component {
                       localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
                       !localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
           navItems = <Nav className="ml-auto" navbar>
+            <NavbarBrand style={{marginLeft:10}} tag={Link} to="/"><HomeOutlined /></NavbarBrand>
             <NavItem>
                 <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
             </NavItem>
@@ -107,6 +111,7 @@ class AppNavbar extends Component {
                       localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
                       localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
           navItems = <Nav className='ml-auto' navbar>
+          <NavbarBrand style={{marginLeft:10}} tag={Link} to="/"><HomeOutlined /></NavbarBrand>
           <NavItem>
             <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
           </NavItem>
@@ -131,6 +136,7 @@ class AppNavbar extends Component {
                       !localStorage.getItem(USER_ROLES).includes(ROLE_USER) &&
                       localStorage.getItem(USER_ROLES).includes(ROLE_AUTOPICKER)){ 
         navItems = <Nav className="ml-auto" navbar>
+          <NavbarBrand style={{marginLeft:10}} tag={Link} to="/autopicker/requests"><HomeOutlined /></NavbarBrand>
         <NavItem>
             <NavLink tag={Link} to="/users/me"><UserOutlined /></NavLink>
         </NavItem>
@@ -149,6 +155,7 @@ class AppNavbar extends Component {
         </Nav>
     } else {
         navItems = <Nav className="ml-auto" navbar>
+        <NavbarBrand style={{marginLeft:10}} tag={Link} to="/"><HomeOutlined /></NavbarBrand>
         <NavItem>
             <NavLink  style={{paddingTop:13}} tag={Link} to="/auth">Login</NavLink>
         </NavItem>
@@ -160,7 +167,6 @@ class AppNavbar extends Component {
 
 
     return <Navbar color="dark" dark expand="md">
-      <NavbarBrand style={{marginLeft:10}} tag={Link} to="/"><HomeOutlined /></NavbarBrand>
       <NavbarToggler onClick={this.toggle}/>
       <Collapse isOpen={this.state.isOpen} navbar>
           {navItems}

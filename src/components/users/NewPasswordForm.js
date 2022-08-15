@@ -100,7 +100,7 @@ class EnterNewPasswordForm extends React.Component {
                       />
                       <Button size="sm"
                         type="primary"
-                        htmlType="submit"
+                        htmltype="submit"
                         className="login-form-button">
                       Confirm password
                       </Button>

@@ -34,14 +34,10 @@ class CarPage extends Component {
             inspectionStatus : '',
         },
         isLoading: true,
-        isDescriptionModalVisible: false,
-        isInspectionModalVisible: false },
+        isDescriptionModalVisible: false},
 
-        this.handleInspectionOk = this.handleInspectionOk.bind(this);
-        this.handleInspectionCancel = this.handleInspectionCancel.bind(this); 
         this.handleDescriptionOk = this.handleDescriptionOk.bind(this);
         this.handleDescriptionCancel = this.handleDescriptionCancel.bind(this); 
-        this.showInspectionModal = this.showInspectionModal.bind(this); 
         this.showDescriptionModal = this.showDescriptionModal.bind(this); 
         this.handleChange = this.handleChange.bind(this);
         this.handleInspectionChange = this.handleInspectionChange.bind(this);
@@ -79,17 +75,10 @@ class CarPage extends Component {
         this.setState({isDescriptionModalVisible: true});
     };
 
-    showInspectionModal = () => {
-        this.setState({isInspectionModalVisible: true});
-    };
-
     handleDescriptionCancel = () => {
         this.setState({isDescriptionModalVisible: false});
     };
 
-    handleInspectionCancel = () => {
-        this.setState({isInspectionModalVisible: false});
-    };
 
     handleDescriptionOk = () => {
 
@@ -107,24 +96,6 @@ class CarPage extends Component {
 
 
         this.setState({isDescriptionModalVisible: false});
-    };
-
-    handleInspectionOk = (e) => {
-        const data = new FormData(e.currentTarget.parentElement.parentElement.parentElement.querySelector('#newDepartureForm'));
-
-        const departureReq = {
-            description: data.get('departureDescription'),
-            dateOfDeparture: data.get('dateOfDeparture'),
-            userId: localStorage.getItem('id'),
-            carId: this.state.car.id
-        }
-        
-        create(departureReq)
-            .then(data => {
-                    message.success("Departure is created!");
-                })
-
-        this.setState({isInspectionModalVisible: false});
     };
 
     render() {
@@ -157,15 +128,8 @@ class CarPage extends Component {
                             <p>{car.yearOfIssue}, {car.driveUnit}, {car.engineCapacity}l, {car.engineType}, {car.mileage}km</p>
                             <p>{car.description}</p>
                             <div className='row' style={{margin:'2%'}}>
-                                <Button style={{width:'30%'}} onClick={this.showInspectionModal}>Select for inspection</Button>
                                 <Button style={{backgroundColor:'#0bb978',  width:'30%'}} onClick={this.showDescriptionModal}>Add description</Button>
                             </div>
-                            <Modal title="Enter departure data" visible={this.state.isInspectionModalVisible} onOk={this.handleInspectionOk} onCancel={this.handleInspectionCancel}>
-                                <Form id='newDepartureForm'>
-                                    <DatePicker picker="year" style={{marginBottom:20, width:'100%'}} min={2022} max={2099} step="1" name="dateOfDeparture" id="dateOfDeparture" placeholder='Date of departure'/>
-                                    <TextArea rows={4} style={{marginBottom:20}} type="text" name="departureDescription" id="departureDescription" placeholder="Description" required/>
-                                </Form> 
-                            </Modal>
                             <Modal title="Add description" visible={this.state.isDescriptionModalVisible} onOk={this.handleDescriptionOk} onCancel={this.handleDescriptionCancel}>
                                 <TextArea rows={4} style={{marginBottom:20}} type="text" name="description" id="description" value={car.description || ''}
                                     onInput={this.handleChange} placeholder="Car description" required/>
